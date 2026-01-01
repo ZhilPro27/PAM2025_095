@@ -4,11 +4,15 @@ import com.example.perpustakaan_app.modeldata.DataCatatanDenda
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PUT
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ServiceApiCatatanDenda {
     @GET("denda")
     suspend fun getCatatanDenda(): List<DataCatatanDenda>
+
+    @GET("denda/{id_denda}")
+    suspend fun getCatatanDendaById(@Path("id_denda") id_denda: Int): DataCatatanDenda
 
     @GET("denda/search")
     suspend fun getCatatanDendaByKeyword(@Query("keyword") keyword: String): List<DataCatatanDenda>

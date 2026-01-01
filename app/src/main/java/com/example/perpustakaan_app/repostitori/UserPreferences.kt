@@ -12,20 +12,25 @@ import kotlinx.coroutines.flow.map
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "session_setting")
 
 class UserPreferences(private val context: Context) {
-    private val TOKEN_KEY = stringPreferencesKey("auth_token")
-    val authToken: Flow<String?> = context.dataStore.data.map { preferences ->
-        preferences[TOKEN_KEY]
+    companion object {
+        private val TOKEN_KEY = stringPreferencesKey("auth_token")
+        private val ID_USER_KEY = stringPreferencesKey("id_user")
+        private val EMAIL_KEY = stringPreferencesKey("email_user")
     }
+    val authToken: Flow<String?> = context.dataStore.data.map { it[TOKEN_KEY] }
+    val getUserId: Flow<String?> = context.dataStore.data.map { it[ID_USER_KEY] }
 
-    suspend fun saveToken(token: String) {
+    suspend fun saveSession(token: String, id: String, email: String) {
         context.dataStore.edit { preferences ->
             preferences[TOKEN_KEY] = token
+            preferences[ID_USER_KEY] = id
+            preferences[EMAIL_KEY] = email
         }
     }
 
-    suspend fun clearToken() {
+    suspend fun clearSession() {
         context.dataStore.edit { preferences ->
-            preferences.remove(TOKEN_KEY)
+            preferences.clear()
         }
     }
 }

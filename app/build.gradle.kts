@@ -60,6 +60,24 @@ dependencies {
     implementation(libs.okhttp.logging)
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
+    implementation(libs.androidx.compose.runtime)
+    implementation(libs.androidx.material3)
+    // CameraX
+    val cameraxVersion = "1.3.0"
+    implementation("androidx.camera:camera-core:$cameraxVersion")
+    implementation("androidx.camera:camera-camera2:$cameraxVersion")
+    implementation("androidx.camera:camera-lifecycle:$cameraxVersion")
+    implementation("androidx.camera:camera-view:$cameraxVersion")
+
+// Google ML Kit Barcode Scanning
+    implementation("com.google.mlkit:barcode-scanning:17.2.0")
+
+// Accompanist Permissions (untuk request izin kamera di Compose dengan mudah)
+    implementation("com.google.accompanist:accompanist-permissions:0.32.0")
+
+    implementation("androidx.compose.material:material-icons-extended:1.7.6")
+    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("androidx.compose.runtime:runtime-livedata:1.7.6")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

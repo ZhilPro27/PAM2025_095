@@ -1,5 +1,6 @@
 package com.example.perpustakaan_app.modeldata
 
+import kotlinx.serialization.SerialName // Disarankan pakai ini untuk keamanan
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -8,11 +9,17 @@ data class DataBuku(
     val judul: String,
     val penulis: String,
     val penerbit: String,
-    val tahun_terbit: String,
+
+    // UBAH 1: Tipe data disesuaikan dengan JSON (Angka -> Int)
+    val tahun_terbit: Int,
+
     val isbn: String,
     val nomor_panggil: String,
     val stok: Int,
-    val gambar: String,
+
+    // UBAH 2: Tambahkan tanda tanya (?) karena JSON mengirim null
+    val gambar: String?,
+
     val deskripsi: String
 )
 
@@ -30,7 +37,7 @@ data class DetailBuku(
     val isbn: String = "",
     val nomor_panggil: String = "",
     val stok: Int = 0,
-    val gambar: String = "",
+    val gambar: String = "", // Di UI kita biarkan String (kosong jika null)
     val deskripsi: String = ""
 )
 
@@ -39,11 +46,13 @@ fun DetailBuku.toDataBuku() : DataBuku = DataBuku(
     judul = judul,
     penulis = penulis,
     penerbit = penerbit,
-    tahun_terbit = tahun_terbit,
+    // Konversi String UI ke Int untuk Server
+    tahun_terbit = tahun_terbit.toIntOrNull() ?: 0,
     isbn = isbn,
     nomor_panggil = nomor_panggil,
     stok = stok,
-    gambar = gambar,
+    // Jika kosong, kirim null ke server (opsional) atau kirim string kosong
+    gambar = if (gambar.isBlank()) null else gambar,
     deskripsi = deskripsi
 )
 
@@ -57,10 +66,12 @@ fun DataBuku.toDetailBuku() : DetailBuku = DetailBuku(
     judul = judul,
     penulis = penulis,
     penerbit = penerbit,
-    tahun_terbit = tahun_terbit,
+    // Konversi Int Server ke String UI
+    tahun_terbit = tahun_terbit.toString(),
     isbn = isbn,
     nomor_panggil = nomor_panggil,
     stok = stok,
-    gambar = gambar,
+    // Handle null gambar menjadi string kosong agar aman di UI
+    gambar = gambar ?: "",
     deskripsi = deskripsi
 )

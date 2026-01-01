@@ -18,6 +18,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 
 interface ContainerApp{
+    val userPreferences: UserPreferences
     val repositoryAuth: RepositoryAuth
     val repositoryDataBuku: RepositoryDataBuku
     val repositoryDataAnggota: RepositoryDataAnggota
@@ -26,8 +27,8 @@ interface ContainerApp{
 }
 
 class DefaultContainerApp(private val context: Context) : ContainerApp {
-    private val baseurl = "http://43.159.44.188/api/"
-    private val userPreferences = UserPreferences(context)
+    private val baseurl = "https://perpustakaan-pam-app.zhilalkrisna.my.id/api/"
+    override val userPreferences = UserPreferences(context)
 
     val logging = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
@@ -47,9 +48,24 @@ class DefaultContainerApp(private val context: Context) : ContainerApp {
         chain.proceed(requestBuilder.build())
     }
 
+    val authResponseInterceptor = Interceptor { chain ->
+        val request = chain.request()
+        val response = chain.proceed(request)
+
+        // Cek jika server mengembalikan error 401 (Unauthorized)
+        if (response.code == 401) {
+            // Hapus session secara sinkron agar AppViewModel langsung bereaksi
+            runBlocking {
+                userPreferences.clearSession()
+            }
+        }
+        response
+    }
+
     val klien = OkHttpClient.Builder()
         .addInterceptor(logging)
         .addInterceptor(authInterceptor)
+        .addInterceptor(authResponseInterceptor)
         .build()
 
     private val retrofit: Retrofit = Retrofit.Builder()

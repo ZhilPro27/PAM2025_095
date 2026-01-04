@@ -29,6 +29,7 @@ import com.example.perpustakaan_app.uicontroller.route.buku.DestinasiEditBuku
 import com.example.perpustakaan_app.uicontroller.route.buku.DestinasiTambahBuku
 import com.example.perpustakaan_app.uicontroller.route.catatan_denda.DestinasiCatatanDenda
 import com.example.perpustakaan_app.uicontroller.route.login.DestinasiLogin
+import com.example.perpustakaan_app.uicontroller.route.peminjaman_buku.DestinasiEditPeminjamanBuku
 import com.example.perpustakaan_app.uicontroller.route.peminjaman_buku.DestinasiPeminjamanBuku
 import com.example.perpustakaan_app.uicontroller.route.peminjaman_buku.DestinasiTambahPeminjamanBuku
 import com.example.perpustakaan_app.view.PerpustakaanBottomAppBar
@@ -44,6 +45,7 @@ import com.example.perpustakaan_app.view.peminjaman_buku.HalamanPeminjamanBuku
 import com.example.perpustakaan_app.uicontroller.route.profil.DestinasiProfil
 import com.example.perpustakaan_app.view.anggota.HalamanEditAnggota
 import com.example.perpustakaan_app.view.anggota.HalamanTambahAnggota
+import com.example.perpustakaan_app.view.peminjaman_buku.HalamanEditPeminjamanBuku
 import com.example.perpustakaan_app.view.peminjaman_buku.HalamanTambahPeminjamanBuku
 import com.example.perpustakaan_app.view.profil.HalamanProfil
 
@@ -230,7 +232,7 @@ fun PetaNavigasi(
                             navController.navigate(DestinasiTambahPeminjamanBuku.route)
                         },
                         onEditClick = {
-                            id -> navController.navigate("${DestinasiEditAnggota.route}/$id")
+                            id -> navController.navigate("${DestinasiEditPeminjamanBuku.route}/$id")
                         }
                     )
                 }
@@ -246,6 +248,31 @@ fun PetaNavigasi(
                             navController.previousBackStackEntry
                                 ?.savedStateHandle
                                 ?.set("pesan_sukses", "Berhasil menambah data peminjaman!")
+                            navController.popBackStack()
+                        }
+                    )
+                }
+                composable(
+                    route = DestinasiEditPeminjamanBuku.routeWithArgs,
+                    arguments = listOf(navArgument(DestinasiEditPeminjamanBuku.idPeminjamanBuku) {
+                        type = NavType.IntType
+                    })
+                ) {
+                    HalamanEditPeminjamanBuku(
+                        navigateBack = {
+                            navController.popBackStack()
+                        },
+                        onSuccess = {
+                            // Memberi sinyal refresh ke halaman sebelumnya
+                            navController.previousBackStackEntry
+                                ?.savedStateHandle
+                                ?.set("refresh_data", true)
+
+                            // Memberi pesan sukses
+                            navController.previousBackStackEntry
+                                ?.savedStateHandle
+                                ?.set("pesan_sukses", "Berhasil memperbarui data peminjaman!")
+
                             navController.popBackStack()
                         }
                     )

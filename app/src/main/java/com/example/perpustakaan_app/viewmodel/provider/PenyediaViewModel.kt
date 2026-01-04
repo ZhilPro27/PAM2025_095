@@ -14,6 +14,7 @@ import com.example.perpustakaan_app.viewmodel.buku.TambahBukuViewModel
 import com.example.perpustakaan_app.viewmodel.buku.BukuViewModel
 import com.example.perpustakaan_app.viewmodel.buku.EditBukuViewModel
 import com.example.perpustakaan_app.viewmodel.login.LoginViewModel
+import com.example.perpustakaan_app.viewmodel.peminjaman_buku.EditPeminjamanBukuViewModel
 import com.example.perpustakaan_app.viewmodel.peminjaman_buku.PeminjamanBukuViewModel
 import com.example.perpustakaan_app.viewmodel.peminjaman_buku.TambahPeminjamanViewModel
 
@@ -87,7 +88,14 @@ object PenyediaViewModel {
                 aplikasiPerpustakaan().containerApp.repositoryDataBuku
             )
         }
-
+        initializer {
+            EditPeminjamanBukuViewModel(
+                this.createSavedStateHandle(),
+                aplikasiPerpustakaan().containerApp.repositoryDataPeminjamanBuku,
+                aplikasiPerpustakaan().containerApp.repositoryDataAnggota,
+                aplikasiPerpustakaan().containerApp.repositoryDataBuku
+            )
+        }
         // Nanti kamu bisa tambahkan initializer untuk ViewModel lain di sini
         // (Contoh: AnggotaViewModel, LoginViewModel, dll)
     }

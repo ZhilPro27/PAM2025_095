@@ -1,5 +1,6 @@
 package com.example.perpustakaan_app.modeldata
 
+import com.example.perpustakaan_app.utils.konversiTanggalServerKeLokal
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -7,8 +8,8 @@ data class DataPeminjamanBuku(
     val id_peminjaman: Int,
     val id_anggota: Int,
     val id_buku: Int,
-    val tanggal_pinjam: String,
-    val tanggal_jatuh_tempo: String,
+    val tanggal_pinjam: String?,
+    val tanggal_jatuh_tempo: String?,
     val tanggal_kembali: String?,
     val status: String,
     val nama: String? = null,
@@ -24,9 +25,9 @@ data class DetailPeminjamanBuku(
     val id_peminjaman: Int = 0,
     val id_anggota: Int = 0,
     val id_buku: Int = 0,
-    val tanggal_pinjam: String = "",
-    val tanggal_jatuh_tempo: String = "",
-    val tanggal_kembali: String = "",
+    val tanggal_pinjam: String? = "",
+    val tanggal_jatuh_tempo: String? = "",
+    val tanggal_kembali: String? = "",
     val status: String = "",
     val nama: String = "",
     val judul: String = ""
@@ -38,7 +39,7 @@ fun DetailPeminjamanBuku.toDataPeminjamanBuku() : DataPeminjamanBuku = DataPemin
     id_buku = id_buku,
     tanggal_pinjam = tanggal_pinjam,
     tanggal_jatuh_tempo = tanggal_jatuh_tempo,
-    tanggal_kembali = tanggal_kembali.ifBlank { null },
+    tanggal_kembali = tanggal_kembali?.ifBlank { null },
     status = status,
     nama = nama,
     judul = judul
@@ -54,10 +55,25 @@ fun DataPeminjamanBuku.toDetailPeminjamanBuku() : DetailPeminjamanBuku = DetailP
     id_peminjaman = id_peminjaman,
     id_anggota = id_anggota,
     id_buku = id_buku,
-    tanggal_pinjam = tanggal_pinjam,
-    tanggal_jatuh_tempo = tanggal_jatuh_tempo,
-    tanggal_kembali = tanggal_kembali ?: "",
+    tanggal_pinjam = konversiTanggalServerKeLokal(tanggal_pinjam),
+    tanggal_jatuh_tempo = konversiTanggalServerKeLokal(tanggal_jatuh_tempo),
+    tanggal_kembali = konversiTanggalServerKeLokal( tanggal_kembali ?: ""),
     status = status,
     nama = nama ?: "",
     judul = judul ?: ""
+)
+
+@Serializable
+data class DataUpdatePeminjamanBuku(
+    val id_anggota: Int,
+    val id_buku: Int,
+    val tanggal_pinjam: String?,
+    val tanggal_jatuh_tempo: String?
+)
+
+fun DetailPeminjamanBuku.toDataUpdatePeminjamanBuku(): DataUpdatePeminjamanBuku = DataUpdatePeminjamanBuku(
+    id_anggota = id_anggota,
+    id_buku = id_buku,
+    tanggal_pinjam = tanggal_pinjam,
+    tanggal_jatuh_tempo = tanggal_jatuh_tempo
 )

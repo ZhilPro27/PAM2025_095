@@ -16,7 +16,7 @@ import java.util.TimeZone
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OutlinedDateField(
-    value: String,
+    value: String?,
     onValueChange: (String) -> Unit,
     label: String,
     modifier: Modifier = Modifier
@@ -61,17 +61,19 @@ fun OutlinedDateField(
     Box(modifier = modifier) {
 
         // 1. Text Field (Tampilan Visual)
-        OutlinedTextField(
-            value = value,
-            onValueChange = { },
-            label = { Text(label) },
-            readOnly = true, // Tetap readOnly agar keyboard tidak muncul
-            trailingIcon = {
-                Icon(imageVector = Icons.Default.DateRange, contentDescription = null)
-            },
-            modifier = Modifier.fillMaxWidth(), // HAPUS .clickable dari sini
-            singleLine = true
-        )
+        if (value != null) {
+            OutlinedTextField(
+                value = value,
+                onValueChange = { },
+                label = { Text(label) },
+                readOnly = true, // Tetap readOnly agar keyboard tidak muncul
+                trailingIcon = {
+                    Icon(imageVector = Icons.Default.DateRange, contentDescription = null)
+                },
+                modifier = Modifier.fillMaxWidth(), // HAPUS .clickable dari sini
+                singleLine = true
+            )
+        }
 
         // 2. Lapisan Transparan (Penerima Klik)
         // Box ini menutupi seluruh area TextField. Saat diklik, dia yang merespon.

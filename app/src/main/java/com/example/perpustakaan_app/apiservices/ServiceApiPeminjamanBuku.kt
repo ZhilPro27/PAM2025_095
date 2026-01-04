@@ -1,6 +1,7 @@
 package com.example.perpustakaan_app.apiservices
 
 import com.example.perpustakaan_app.modeldata.DataPeminjamanBuku
+import com.example.perpustakaan_app.modeldata.DataUpdatePeminjamanBuku
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -28,7 +29,10 @@ interface ServiceApiPeminjamanBuku{
     suspend fun postPeminjamanBuku(@Body dataPeminjamanBuku: DataPeminjamanBuku):retrofit2.Response<Void>
 
     @PUT("peminjaman/update/{id_peminjaman}")
-    suspend fun putPeminjamanBuku(@Path("id_peminjaman") id_peminjaman: Int,  @Body dataPeminjamanBuku: DataPeminjamanBuku):retrofit2.Response<Void>
+    suspend fun putPeminjamanBuku(
+        @Path("id_peminjaman") id_peminjaman: Int,
+        @Body data: DataUpdatePeminjamanBuku // Ubah dari DataPeminjamanBuku menjadi DataUpdatePeminjamanBuku
+    ): retrofit2.Response<Void>
 
     @DELETE("peminjaman/delete/{id_peminjaman}")
     suspend fun deletePeminjamanBuku(@Path("id_peminjaman") id_peminjaman: Int):retrofit2.Response<Void>

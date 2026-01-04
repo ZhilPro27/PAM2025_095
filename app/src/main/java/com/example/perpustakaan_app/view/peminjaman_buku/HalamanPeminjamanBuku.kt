@@ -12,7 +12,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -33,10 +32,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.perpustakaan_app.modeldata.DataPeminjamanBuku
 import com.example.perpustakaan_app.utils.WidgetSnackbarKeren
+import com.example.perpustakaan_app.utils.konversiTanggalServerKeLokal
 import com.example.perpustakaan_app.viewmodel.provider.PenyediaViewModel
 import com.example.perpustakaan_app.viewmodel.peminjaman_buku.PeminjamanBukuUiState
 import com.example.perpustakaan_app.viewmodel.peminjaman_buku.PeminjamanBukuViewModel
-import com.example.perpustakaan_app.utils.formatTanggal
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -233,6 +232,10 @@ fun ItemPeminjamanCard(
 ) {
     // Cek Status
     val isReturned = peminjaman.status == "kembali"
+    val tanggalPinjam = konversiTanggalServerKeLokal(peminjaman.tanggal_pinjam)
+    val tanggalJatuhTempo = konversiTanggalServerKeLokal(peminjaman.tanggal_jatuh_tempo)
+    val tanggalKembali = konversiTanggalServerKeLokal(peminjaman.tanggal_kembali)
+
 
     Card(
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
@@ -271,12 +274,12 @@ fun ItemPeminjamanCard(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text("Judul Buku       : ${peminjaman.judul}")
-            Text("Tgl Pinjam   : ${peminjaman.tanggal_pinjam.formatTanggal()}")
-            Text("Jatuh Tempo: ${peminjaman.tanggal_jatuh_tempo.formatTanggal()}")
+            Text("Tgl Pinjam   : ${tanggalPinjam}")
+            Text("Jatuh Tempo: ${tanggalJatuhTempo}")
 
             if (isReturned) {
                 Text(
-                    "Dikembalikan: ${peminjaman.tanggal_kembali.formatTanggal() ?: "-"}",
+                    "Dikembalikan: ${tanggalKembali ?: "-"}",
                     fontWeight = FontWeight.SemiBold,
                     color = Color(0xFF2E7D32)
                 )

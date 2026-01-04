@@ -10,20 +10,20 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.perpustakaan_app.uicontroller.route.anggota.DestinasiTambahAnggota
+import com.example.perpustakaan_app.modeldata.DataAnggota
+import com.example.perpustakaan_app.modeldata.DataBuku
 import com.example.perpustakaan_app.uicontroller.route.peminjaman_buku.DestinasiTambahPeminjamanBuku
 import com.example.perpustakaan_app.utils.WidgetSnackbarKeren
 import com.example.perpustakaan_app.view.PerpustakaanTopAppBar
-import com.example.perpustakaan_app.view.widget.DynamicSelectTextField
 import com.example.perpustakaan_app.view.widget.OutlinedDateField
 import com.example.perpustakaan_app.view.widget.SearchableDropDownMenu
 import com.example.perpustakaan_app.viewmodel.peminjaman_buku.DetailPeminjaman
+import com.example.perpustakaan_app.viewmodel.peminjaman_buku.InsertPeminjamanUiState
 import com.example.perpustakaan_app.viewmodel.peminjaman_buku.TambahPeminjamanViewModel
 import com.example.perpustakaan_app.viewmodel.provider.PenyediaViewModel
 import kotlinx.coroutines.launch
 
-
-// -- UI Screen --
+// 1. Komponen Utama Halaman
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HalamanTambahPeminjamanBuku(
@@ -33,7 +33,6 @@ fun HalamanTambahPeminjamanBuku(
     viewModel: TambahPeminjamanViewModel = viewModel(factory = PenyediaViewModel.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val scrollState = rememberScrollState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
@@ -43,7 +42,6 @@ fun HalamanTambahPeminjamanBuku(
             snackbarHostState.showSnackbar(pesan)
         }
     }
-
 
     Scaffold(
         snackbarHost = { WidgetSnackbarKeren(hostState = snackbarHostState) },
@@ -57,71 +55,126 @@ fun HalamanTambahPeminjamanBuku(
             )
         }
     ) { innerPadding ->
-        Column(
+        BodyTambahPeminjamanBuku(
+            uiState = viewModel.uiState,
+            listAnggota = viewModel.listAnggota,
+            listBuku = viewModel.listBuku,
+            selectedAnggotaNama = viewModel.selectedAnggotaNama,
+            selectedBukuJudul = viewModel.selectedBukuJudul,
+            onAnggotaSelected = viewModel::onAnggotaSelected,
+            onBukuSelected = viewModel::onBukuSelected,
+            onValueChange = viewModel::updateUiState,
+            onSaveClick = {
+                coroutineScope.launch {
+                    val isSuccess = viewModel.savePeminjaman(context)
+                    if (isSuccess) {
+                        onSuccess()
+                    }
+                }
+            },
             modifier = Modifier
                 .padding(innerPadding)
-                .verticalScroll(scrollState),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .verticalScroll(rememberScrollState())
+                .fillMaxWidth()
+        )
+    }
+}
+
+// 2. Komponen Body (Layout Konten & Tombol Simpan)
+@Composable
+fun BodyTambahPeminjamanBuku(
+    uiState: InsertPeminjamanUiState,
+    listAnggota: List<DataAnggota>,
+    listBuku: List<DataBuku>,
+    selectedAnggotaNama: String,
+    selectedBukuJudul: String,
+    onAnggotaSelected: (DataAnggota) -> Unit,
+    onBukuSelected: (DataBuku) -> Unit,
+    onValueChange: (DetailPeminjaman) -> Unit,
+    onSaveClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier.padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        FormInputPeminjamanBuku(
+            detailPeminjaman = uiState.detailPeminjaman,
+            listAnggota = listAnggota,
+            listBuku = listBuku,
+            selectedAnggotaNama = selectedAnggotaNama,
+            selectedBukuJudul = selectedBukuJudul,
+            onAnggotaSelected = onAnggotaSelected,
+            onBukuSelected = onBukuSelected,
+            onValueChange = onValueChange
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Button(
+            onClick = onSaveClick,
+            modifier = Modifier.fillMaxWidth()
         ) {
-            val detail = viewModel.uiState.detailPeminjaman
-
-            SearchableDropDownMenu(
-                options = viewModel.listAnggota,
-                label = "Cari & Pilih Anggota",
-                selectedOptionLabel = viewModel.selectedAnggotaNama, // State teks dari VM
-                onOptionSelected = { anggota ->
-                    viewModel.onAnggotaSelected(anggota)
-                },
-                itemToString = { it.nama }, // Cara ambil teks dari objek Anggota
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
-            )
-
-
-            SearchableDropDownMenu(
-                options = viewModel.listBuku,
-                label = "Cari & Pilih Buku",
-                selectedOptionLabel = viewModel.selectedBukuJudul, // State teks dari VM
-                onOptionSelected = { buku ->
-                    viewModel.onBukuSelected(buku)
-                },
-                itemToString = { it.judul }, // Cara ambil teks dari objek Buku
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
-            )
-
-            OutlinedDateField(
-                value = detail.tanggal_pinjam,
-                onValueChange = { selectedDate ->
-                    viewModel.updateUiState(detail.copy(tanggal_pinjam = selectedDate))
-                },
-                label = "Tanggal Pinjam",
-                modifier = Modifier.fillMaxWidth().padding(16.dp)
-            )
-
-
-            OutlinedDateField(
-                value = detail.tanggal_jatuh_tempo,
-                onValueChange = { selectedDate ->
-                    viewModel.updateUiState(detail.copy(tanggal_jatuh_tempo = selectedDate))
-                },
-                label = "Tanggal Jatuh Tempo",
-                modifier = Modifier.fillMaxWidth().padding(16.dp)
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Button(
-                onClick = {
-                    coroutineScope.launch {
-                        val isSuccess = viewModel.savePeminjaman(context)
-                        if (isSuccess) {
-                            onSuccess()
-                        }
-                    }
-                },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Simpan Data Peminjaman")
-            }
+            Text("Simpan Data Peminjaman")
         }
+    }
+}
+
+// 3. Komponen Form Input (Dropdown & Tanggal)
+@Composable
+fun FormInputPeminjamanBuku(
+    detailPeminjaman: DetailPeminjaman,
+    listAnggota: List<DataAnggota>,
+    listBuku: List<DataBuku>,
+    selectedAnggotaNama: String,
+    selectedBukuJudul: String,
+    onAnggotaSelected: (DataAnggota) -> Unit,
+    onBukuSelected: (DataBuku) -> Unit,
+    onValueChange: (DetailPeminjaman) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        // Dropdown Anggota
+        SearchableDropDownMenu(
+            options = listAnggota,
+            label = "Cari & Pilih Anggota",
+            selectedOptionLabel = selectedAnggotaNama,
+            onOptionSelected = onAnggotaSelected,
+            itemToString = { it.nama },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        // Dropdown Buku
+        SearchableDropDownMenu(
+            options = listBuku,
+            label = "Cari & Pilih Buku",
+            selectedOptionLabel = selectedBukuJudul,
+            onOptionSelected = onBukuSelected,
+            itemToString = { it.judul },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        // Input Tanggal Pinjam
+        OutlinedDateField(
+            value = detailPeminjaman.tanggal_pinjam,
+            onValueChange = { selectedDate ->
+                onValueChange(detailPeminjaman.copy(tanggal_pinjam = selectedDate))
+            },
+            label = "Tanggal Pinjam",
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        // Input Tanggal Jatuh Tempo
+        OutlinedDateField(
+            value = detailPeminjaman.tanggal_jatuh_tempo,
+            onValueChange = { selectedDate ->
+                onValueChange(detailPeminjaman.copy(tanggal_jatuh_tempo = selectedDate))
+            },
+            label = "Tanggal Jatuh Tempo",
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }

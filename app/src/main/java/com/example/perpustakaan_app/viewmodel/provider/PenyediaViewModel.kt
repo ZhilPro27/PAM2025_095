@@ -14,7 +14,6 @@ import com.example.perpustakaan_app.viewmodel.buku.TambahBukuViewModel
 import com.example.perpustakaan_app.viewmodel.buku.BukuViewModel
 import com.example.perpustakaan_app.viewmodel.buku.EditBukuViewModel
 import com.example.perpustakaan_app.viewmodel.login.LoginViewModel
-import com.example.perpustakaan_app.viewmodel.peminjaman_buku.EditPeminjamanViewModel
 import com.example.perpustakaan_app.viewmodel.peminjaman_buku.PeminjamanBukuViewModel
 import com.example.perpustakaan_app.viewmodel.peminjaman_buku.TambahPeminjamanViewModel
 
@@ -86,14 +85,6 @@ object PenyediaViewModel {
                 aplikasiPerpustakaan().containerApp.repositoryDataPeminjamanBuku,
                 aplikasiPerpustakaan().containerApp.repositoryDataAnggota,
                 aplikasiPerpustakaan().containerApp.repositoryDataBuku
-            )
-        }
-        initializer {
-            EditPeminjamanViewModel(
-                this.createSavedStateHandle(),
-                aplikasiPerpustakaan().containerApp.repositoryDataPeminjamanBuku,
-                aplikasiPerpustakaan().containerApp.repositoryDataBuku,
-                aplikasiPerpustakaan().containerApp.repositoryDataAnggota
             )
         }
 

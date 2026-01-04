@@ -7,6 +7,7 @@ interface RepositoryDataPeminjamanBuku {
     suspend fun getPeminjamanBuku(): List<DataPeminjamanBuku>
     suspend fun getPeminjamanBukuById(id_peminjaman: Int): DataPeminjamanBuku
     suspend fun getPeminjamanBukuByKeyword(keyword: String): List<DataPeminjamanBuku>
+    suspend fun putStatusPeminjamanBuku(id_peminjaman: Int)
     suspend fun postPeminjamanBuku(dataPeminjamanBuku: DataPeminjamanBuku):retrofit2.Response<Void>
     suspend fun putPeminjamanBuku(id_peminjaman: Int, dataPeminjamanBuku: DataPeminjamanBuku):retrofit2.Response<Void>
     suspend fun deletePeminjamanBuku(id_peminjaman: Int):retrofit2.Response<Void>
@@ -18,6 +19,13 @@ class JaringanRepositoryDataPeminjamanBuku(
     override suspend fun getPeminjamanBuku(): List<DataPeminjamanBuku> = serviceApiPeminjamanBuku.getPeminjamanBuku()
     override suspend fun getPeminjamanBukuById(id_peminjaman: Int): DataPeminjamanBuku = serviceApiPeminjamanBuku.getPeminjamanBukuById(id_peminjaman)
     override suspend fun getPeminjamanBukuByKeyword(keyword: String): List<DataPeminjamanBuku> = serviceApiPeminjamanBuku.getPeminjamanBukuByKeyword(keyword)
+    override suspend fun putStatusPeminjamanBuku(id_peminjaman: Int) {
+        val requestBody = mapOf(
+            "id_peminjaman" to id_peminjaman.toString(),
+            "status" to "kembali"
+        )
+        serviceApiPeminjamanBuku.putStatusPeminjamanBuku(id_peminjaman, requestBody)
+    }
     override suspend fun postPeminjamanBuku(dataPeminjamanBuku: DataPeminjamanBuku): retrofit2.Response<Void> = serviceApiPeminjamanBuku.postPeminjamanBuku(dataPeminjamanBuku)
     override suspend fun putPeminjamanBuku(id_peminjaman: Int, dataPeminjamanBuku: DataPeminjamanBuku): retrofit2.Response<Void> = serviceApiPeminjamanBuku.putPeminjamanBuku(id_peminjaman, dataPeminjamanBuku)
     override suspend fun deletePeminjamanBuku(id_peminjaman: Int): retrofit2.Response<Void> = serviceApiPeminjamanBuku.deletePeminjamanBuku(id_peminjaman)

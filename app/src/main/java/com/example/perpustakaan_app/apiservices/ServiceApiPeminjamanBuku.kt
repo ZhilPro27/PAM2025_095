@@ -18,6 +18,11 @@ interface ServiceApiPeminjamanBuku{
 
     @GET("peminjaman/search")
     suspend fun getPeminjamanBukuByKeyword(@Query("keyword") keyword: String): List<DataPeminjamanBuku>
+    @POST("peminjaman/status/{id_peminjaman}")
+    suspend fun putStatusPeminjamanBuku(
+        @Path("id_peminjaman") id_peminjaman: Int,
+        @Body statusData: Map<String, String>
+    ): retrofit2.Response<Void>
 
     @POST("peminjaman/create")
     suspend fun postPeminjamanBuku(@Body dataPeminjamanBuku: DataPeminjamanBuku):retrofit2.Response<Void>

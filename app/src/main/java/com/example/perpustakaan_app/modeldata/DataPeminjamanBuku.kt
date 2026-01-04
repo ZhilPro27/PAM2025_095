@@ -9,8 +9,10 @@ data class DataPeminjamanBuku(
     val id_buku: Int,
     val tanggal_pinjam: String,
     val tanggal_jatuh_tempo: String,
-    val tanggal_kembali: String,
-    val status: String
+    val tanggal_kembali: String?,
+    val status: String,
+    val nama: String? = null,
+    val judul: String? = null
 )
 
 data class UIStatePeminjamanBuku(
@@ -25,7 +27,9 @@ data class DetailPeminjamanBuku(
     val tanggal_pinjam: String = "",
     val tanggal_jatuh_tempo: String = "",
     val tanggal_kembali: String = "",
-    val status: String = ""
+    val status: String = "",
+    val nama: String = "",
+    val judul: String = ""
 )
 
 fun DetailPeminjamanBuku.toDataPeminjamanBuku() : DataPeminjamanBuku = DataPeminjamanBuku (
@@ -34,8 +38,10 @@ fun DetailPeminjamanBuku.toDataPeminjamanBuku() : DataPeminjamanBuku = DataPemin
     id_buku = id_buku,
     tanggal_pinjam = tanggal_pinjam,
     tanggal_jatuh_tempo = tanggal_jatuh_tempo,
-    tanggal_kembali = tanggal_kembali,
-    status = status
+    tanggal_kembali = tanggal_kembali.ifBlank { null },
+    status = status,
+    nama = nama,
+    judul = judul
 )
 
 fun DataPeminjamanBuku.toUiStatePeminjamanBuku(isEntryValid: Boolean = false) : UIStatePeminjamanBuku =
@@ -50,6 +56,8 @@ fun DataPeminjamanBuku.toDetailPeminjamanBuku() : DetailPeminjamanBuku = DetailP
     id_buku = id_buku,
     tanggal_pinjam = tanggal_pinjam,
     tanggal_jatuh_tempo = tanggal_jatuh_tempo,
-    tanggal_kembali = tanggal_kembali,
-    status = status
+    tanggal_kembali = tanggal_kembali ?: "",
+    status = status,
+    nama = nama ?: "",
+    judul = judul ?: ""
 )

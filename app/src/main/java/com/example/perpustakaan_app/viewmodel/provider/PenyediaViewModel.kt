@@ -14,6 +14,9 @@ import com.example.perpustakaan_app.viewmodel.buku.TambahBukuViewModel
 import com.example.perpustakaan_app.viewmodel.buku.BukuViewModel
 import com.example.perpustakaan_app.viewmodel.buku.EditBukuViewModel
 import com.example.perpustakaan_app.viewmodel.login.LoginViewModel
+import com.example.perpustakaan_app.viewmodel.peminjaman_buku.EditPeminjamanViewModel
+import com.example.perpustakaan_app.viewmodel.peminjaman_buku.PeminjamanBukuViewModel
+import com.example.perpustakaan_app.viewmodel.peminjaman_buku.TambahPeminjamanViewModel
 
 fun CreationExtras.aplikasiPerpustakaan(): AplikasiPerpustakaan =
     (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as AplikasiPerpustakaan)
@@ -68,6 +71,28 @@ object PenyediaViewModel {
         initializer{
             EditAnggotaViewModel(
                 this.createSavedStateHandle(),
+                aplikasiPerpustakaan().containerApp.repositoryDataAnggota
+            )
+        }
+
+        // Peminjaman Buku
+        initializer {
+            PeminjamanBukuViewModel(
+                aplikasiPerpustakaan().containerApp.repositoryDataPeminjamanBuku
+            )
+        }
+        initializer {
+            TambahPeminjamanViewModel(
+                aplikasiPerpustakaan().containerApp.repositoryDataPeminjamanBuku,
+                aplikasiPerpustakaan().containerApp.repositoryDataAnggota,
+                aplikasiPerpustakaan().containerApp.repositoryDataBuku
+            )
+        }
+        initializer {
+            EditPeminjamanViewModel(
+                this.createSavedStateHandle(),
+                aplikasiPerpustakaan().containerApp.repositoryDataPeminjamanBuku,
+                aplikasiPerpustakaan().containerApp.repositoryDataBuku,
                 aplikasiPerpustakaan().containerApp.repositoryDataAnggota
             )
         }

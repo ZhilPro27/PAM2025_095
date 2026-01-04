@@ -8,7 +8,9 @@ data class DataAnggota (
     val nama: String,
     val no_hp: String,
     val alamat: String
-)
+) {
+    override fun toString(): String = nama
+}
 
 data class UIStateAnggota (
     val detailAnggota: DetailAnggota = DetailAnggota(),

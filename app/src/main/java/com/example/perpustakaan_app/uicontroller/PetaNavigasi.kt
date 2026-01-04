@@ -1,5 +1,7 @@
 package com.example.perpustakaan_app.uicontroller
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -28,6 +30,7 @@ import com.example.perpustakaan_app.uicontroller.route.buku.DestinasiTambahBuku
 import com.example.perpustakaan_app.uicontroller.route.catatan_denda.DestinasiCatatanDenda
 import com.example.perpustakaan_app.uicontroller.route.login.DestinasiLogin
 import com.example.perpustakaan_app.uicontroller.route.peminjaman_buku.DestinasiPeminjamanBuku
+import com.example.perpustakaan_app.uicontroller.route.peminjaman_buku.DestinasiTambahPeminjamanBuku
 import com.example.perpustakaan_app.view.PerpustakaanBottomAppBar
 import com.example.perpustakaan_app.view.buku.HalamanBuku
 import com.example.perpustakaan_app.view.buku.HalamanEditBuku
@@ -41,8 +44,10 @@ import com.example.perpustakaan_app.view.peminjaman_buku.HalamanPeminjamanBuku
 import com.example.perpustakaan_app.uicontroller.route.profil.DestinasiProfil
 import com.example.perpustakaan_app.view.anggota.HalamanEditAnggota
 import com.example.perpustakaan_app.view.anggota.HalamanTambahAnggota
+import com.example.perpustakaan_app.view.peminjaman_buku.HalamanTambahPeminjamanBuku
 import com.example.perpustakaan_app.view.profil.HalamanProfil
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun PetaNavigasi(
     navController: NavHostController = rememberNavController(),
@@ -219,7 +224,31 @@ fun PetaNavigasi(
 
                 // --- 4. RUTE PEMINJAMAN ---
                 composable(DestinasiPeminjamanBuku.route) {
-                    HalamanPeminjamanBuku()
+                    HalamanPeminjamanBuku(
+                        navController = navController,
+                        navigateToItemEntry = {
+                            navController.navigate(DestinasiTambahPeminjamanBuku.route)
+                        },
+                        onEditClick = {
+                            id -> navController.navigate("${DestinasiEditAnggota.route}/$id")
+                        }
+                    )
+                }
+                composable(DestinasiTambahPeminjamanBuku.route){
+                    HalamanTambahPeminjamanBuku(
+                        navigateBack = {
+                            navController.popBackStack()
+                        },
+                        onSuccess = {
+                            navController.previousBackStackEntry
+                                ?.savedStateHandle
+                                ?.set("refresh_data", true)
+                            navController.previousBackStackEntry
+                                ?.savedStateHandle
+                                ?.set("pesan_sukses", "Berhasil menambah data peminjaman!")
+                            navController.popBackStack()
+                        }
+                    )
                 }
 
                 // --- 5. RUTE DENDA ---

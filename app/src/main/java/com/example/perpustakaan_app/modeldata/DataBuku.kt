@@ -21,7 +21,9 @@ data class DataBuku(
     val gambar: String?,
 
     val deskripsi: String
-)
+){
+    override fun toString(): String = judul
+}
 
 data class UIStateBuku(
     val detailBuku: DetailBuku = DetailBuku(),

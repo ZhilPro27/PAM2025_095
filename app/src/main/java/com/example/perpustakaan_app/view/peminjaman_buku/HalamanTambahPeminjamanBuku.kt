@@ -1,5 +1,6 @@
 package com.example.perpustakaan_app.view.peminjaman_buku
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -8,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.perpustakaan_app.modeldata.DataAnggota
@@ -22,7 +24,7 @@ import com.example.perpustakaan_app.viewmodel.peminjaman_buku.InsertPeminjamanUi
 import com.example.perpustakaan_app.viewmodel.peminjaman_buku.TambahPeminjamanViewModel
 import com.example.perpustakaan_app.viewmodel.provider.PenyediaViewModel
 import kotlinx.coroutines.launch
-
+import com.example.perpustakaan_app.R
 // 1. Komponen Utama Halaman
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,7 +47,8 @@ fun HalamanTambahPeminjamanBuku(
 
     Scaffold(
         snackbarHost = { WidgetSnackbarKeren(hostState = snackbarHostState) },
-        modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+            .background(colorResource(R.color.white)),
         topBar = {
             PerpustakaanTopAppBar(
                 title = DestinasiTambahPeminjamanBuku.tittleRes,
@@ -76,6 +79,7 @@ fun HalamanTambahPeminjamanBuku(
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
                 .fillMaxWidth()
+                .background(colorResource(R.color.white))
         )
     }
 }
@@ -140,7 +144,7 @@ fun FormInputPeminjamanBuku(
         // Dropdown Anggota
         SearchableDropDownMenu(
             options = listAnggota,
-            label = "Cari & Pilih Anggota",
+            label = "Cari & Pilih Anggota*",
             selectedOptionLabel = selectedAnggotaNama,
             onOptionSelected = onAnggotaSelected,
             itemToString = { it.nama },
@@ -150,7 +154,7 @@ fun FormInputPeminjamanBuku(
         // Dropdown Buku
         SearchableDropDownMenu(
             options = listBuku,
-            label = "Cari & Pilih Buku",
+            label = "Cari & Pilih Buku*",
             selectedOptionLabel = selectedBukuJudul,
             onOptionSelected = onBukuSelected,
             itemToString = { it.judul },
@@ -163,7 +167,7 @@ fun FormInputPeminjamanBuku(
             onValueChange = { selectedDate ->
                 onValueChange(detailPeminjaman.copy(tanggal_pinjam = selectedDate))
             },
-            label = "Tanggal Pinjam",
+            label = "Tanggal Pinjam*",
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -173,7 +177,7 @@ fun FormInputPeminjamanBuku(
             onValueChange = { selectedDate ->
                 onValueChange(detailPeminjaman.copy(tanggal_jatuh_tempo = selectedDate))
             },
-            label = "Tanggal Jatuh Tempo",
+            label = "Tanggal Jatuh Tempo*",
             modifier = Modifier.fillMaxWidth()
         )
     }

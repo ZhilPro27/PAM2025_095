@@ -1,5 +1,6 @@
 package com.example.perpustakaan_app.view.peminjaman_buku
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -8,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.perpustakaan_app.modeldata.DataAnggota
@@ -23,7 +25,7 @@ import com.example.perpustakaan_app.view.widget.SearchableDropDownMenu
 import com.example.perpustakaan_app.viewmodel.peminjaman_buku.EditPeminjamanBukuViewModel
 import com.example.perpustakaan_app.viewmodel.provider.PenyediaViewModel
 import kotlinx.coroutines.launch
-
+import com.example.perpustakaan_app.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HalamanEditPeminjamanBuku(
@@ -75,6 +77,7 @@ fun HalamanEditPeminjamanBuku(
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
                 .fillMaxWidth()
+                .background(colorResource(R.color.white))
         )
     }
 }
@@ -132,7 +135,7 @@ fun FormInputEditPeminjamanBuku(
         // Dropdown Anggota
         SearchableDropDownMenu(
             options = listAnggota,
-            label = "Pilih Anggota",
+            label = "Pilih Anggota*",
             selectedOptionLabel = detailPeminjaman.nama, // Menampilkan nama yang sudah terpilih
             onOptionSelected = onAnggotaSelected,
             itemToString = { it.nama },
@@ -142,7 +145,7 @@ fun FormInputEditPeminjamanBuku(
         // Dropdown Buku
         SearchableDropDownMenu(
             options = listBuku,
-            label = "Pilih Buku",
+            label = "Pilih Buku*",
             selectedOptionLabel = detailPeminjaman.judul, // Menampilkan judul yang sudah terpilih
             onOptionSelected = onBukuSelected,
             itemToString = { it.judul },
@@ -155,7 +158,7 @@ fun FormInputEditPeminjamanBuku(
             onValueChange = { selectedDate ->
                 onValueChange(detailPeminjaman.copy(tanggal_pinjam = selectedDate))
             },
-            label = "Tanggal Pinjam",
+            label = "Tanggal Pinjam*",
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -165,7 +168,7 @@ fun FormInputEditPeminjamanBuku(
             onValueChange = { selectedDate ->
                 onValueChange(detailPeminjaman.copy(tanggal_jatuh_tempo = selectedDate))
             },
-            label = "Tanggal Jatuh Tempo",
+            label = "Tanggal Jatuh Tempo*",
             modifier = Modifier.fillMaxWidth()
         )
     }

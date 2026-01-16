@@ -15,4 +15,5 @@
     <color name="medium_blue">#1976D2</color>
     <color name="light_blue">#2196F3</color>
     <color name="info">#FFB703</color>
+    <color name="success">#4CAF50</color>
 </resources>

@@ -2,6 +2,7 @@ package com.example.perpustakaan_app.view.peminjaman_buku
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -24,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -36,7 +38,7 @@ import com.example.perpustakaan_app.utils.konversiTanggalServerKeLokal
 import com.example.perpustakaan_app.viewmodel.provider.PenyediaViewModel
 import com.example.perpustakaan_app.viewmodel.peminjaman_buku.PeminjamanBukuUiState
 import com.example.perpustakaan_app.viewmodel.peminjaman_buku.PeminjamanBukuViewModel
-
+import com.example.perpustakaan_app.R
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -81,14 +83,18 @@ fun HalamanPeminjamanBuku(
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize()){
+    Box(modifier = Modifier.fillMaxSize()
+        .background(colorResource(R.color.white))){
         Scaffold(
             floatingActionButton = {
-                FloatingActionButton(onClick = navigateToItemEntry) {
-                    Icon(Icons.Default.Add, contentDescription = "Tambah Peminjaman")
+                FloatingActionButton(onClick = navigateToItemEntry,
+                    containerColor = colorResource(id = R.color.navy)) {
+                    Icon(Icons.Default.Add,
+                        contentDescription = "Tambah Peminjaman",
+                        tint = colorResource(id = R.color.white))
                 }
             }
-        ) { innerPadding ->
+        ) {
             if(openDialog && selectedPeminjamanId != null){
                 DeleteConfirmationDialog(
                     onDeleteConfirm = {
@@ -134,7 +140,9 @@ fun HalamanPeminjamanBuku(
                     openDialogPengembalian = true
                 },
                 onEditClick = onEditClick,
-                modifier = Modifier.padding(innerPadding)
+                modifier = Modifier
+                    .background(colorResource(id = R.color.white))
+                    .fillMaxSize()
             )
         }
 
@@ -168,7 +176,9 @@ fun BodyHalamanPeminjamanBuku(
             onQueryChange = onQueryChange,
             onSearch = onSearch,
             modifier = Modifier.padding(top = 0.dp, start = 16.dp, end = 16.dp, bottom = 0.dp)
+                .background(colorResource(id = R.color.white))
         )
+        Spacer(modifier = Modifier.height(16.dp))
         when (peminjamanBukuUiState) {
             is PeminjamanBukuUiState.Loading -> LoadingScreen(modifier)
             is PeminjamanBukuUiState.Success -> {
@@ -237,10 +247,14 @@ fun ItemPeminjamanCard(
 
 
     Card(
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 3.dp,
+            pressedElevation = 7.dp,
+            draggedElevation = 7.dp
+        ),
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = if (isReturned) Color(0xFFE8F5E9) else MaterialTheme.colorScheme.surfaceVariant
+            containerColor = colorResource(id = R.color.white)
         )
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -291,11 +305,15 @@ fun ItemPeminjamanCard(
                 horizontalArrangement = Arrangement.End
             ) {
                 IconButton(onClick = {onEditClick(peminjaman.id_peminjaman)}) {
-                    Icon(Icons.Default.Edit, contentDescription = "Edit", tint = MaterialTheme.colorScheme.primary)
+                    Icon(Icons.Default.Edit,
+                        contentDescription = "Edit",
+                        tint = colorResource(R.color.info))
                 }
 
                 IconButton(onClick = { onDelete(peminjaman.id_peminjaman) }) {
-                    Icon(Icons.Default.Delete, contentDescription = "Hapus", tint = MaterialTheme.colorScheme.error)
+                    Icon(Icons.Default.Delete,
+                        contentDescription = "Hapus",
+                        tint = colorResource(id = R.color.error))
                 }
 
                 Spacer(modifier = Modifier.width(8.dp))
@@ -303,7 +321,10 @@ fun ItemPeminjamanCard(
                 if (!isReturned) {
                     Button(
                         onClick = { onReturn(peminjaman.id_peminjaman) },
-                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = colorResource(id = R.color.success),
+                            contentColor = Color.White
+                        )
                     ) {
                         Text("Kembalikan")
                     }
@@ -322,6 +343,22 @@ fun SearchPeminjamanBar(
     modifier: Modifier = Modifier
 ) {
     OutlinedTextField(
+        colors = TextFieldDefaults.colors(
+            focusedTextColor = colorResource(id = R.color.navy),
+            unfocusedTextColor = colorResource(id = R.color.navy),
+
+            focusedTrailingIconColor = colorResource(id = R.color.navy),
+            unfocusedTrailingIconColor = colorResource(id = R.color.navy),
+
+            focusedLabelColor = colorResource(id = R.color.navy),
+            unfocusedLabelColor = colorResource(id = R.color.navy),
+
+            focusedPlaceholderColor = colorResource(id = R.color.navy),
+            unfocusedPlaceholderColor = colorResource(id = R.color.navy),
+
+            focusedContainerColor = colorResource(id = R.color.white),
+            unfocusedContainerColor = colorResource(id = R.color.white)
+        ),
         value = query,
         onValueChange = onQueryChange,
         label = { Text("Cari nama") },
@@ -354,13 +391,17 @@ private fun DeleteConfirmationDialog(
         text = { Text("Apakah Anda yakin ingin menghapus peminjaman ini ini? Data yang dihapus tidak dapat dikembalikan.") },
         modifier = modifier,
         dismissButton = {
-            TextButton(onClick = onDeleteCancel) {
+            TextButton(onClick = onDeleteCancel,
+                colors = ButtonDefaults.textButtonColors(
+                    contentColor = colorResource(id = R.color.navy)
+                )) {
                 Text(text = "Batal")
             }
         },
         confirmButton = {
             TextButton(onClick = onDeleteConfirm) {
-                Text(text = "Ya, Hapus", color = MaterialTheme.colorScheme.error)
+                Text(text = "Ya, Hapus",
+                    color = colorResource(id = R.color.error))
             }
         }
     )
@@ -378,13 +419,17 @@ private fun PengembalianConfirmationDialog(
         text = { Text("Apakah Anda yakin ingin mengembalikan buku ini?") },
         modifier = modifier,
         dismissButton = {
-            TextButton(onClick = onPengembalianCancel) {
+            TextButton(onClick = onPengembalianCancel,
+                colors = ButtonDefaults.textButtonColors(
+                    contentColor = colorResource(id = R.color.navy)
+                )) {
                 Text(text = "Batal")
             }
         },
         confirmButton = {
             TextButton(onClick = onPengembalianConfirm) {
-                Text(text = "Ya, Kembalikan", color = MaterialTheme.colorScheme.error)
+                Text(text = "Ya, Kembalikan",
+                    color = colorResource(id = R.color.success))
             }
         }
     )

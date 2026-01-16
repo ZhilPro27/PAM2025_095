@@ -15,8 +15,8 @@ interface ServiceApiCatatanDenda {
     @GET("denda/{id_denda}")
     suspend fun getCatatanDendaById(@Path("id_denda") id_denda: Int): DataCatatanDenda
 
-    @GET("denda/search")
-    suspend fun getCatatanDendaByKeyword(@Query("keyword") keyword: String): List<DataCatatanDenda>
+    @GET("denda/search/{keyword}")
+    suspend fun getCatatanDendaByKeyword(@Path("keyword") keyword: String): List<DataCatatanDenda>
 
     @POST("denda/status/{id_denda}")
     suspend fun putCatatanDenda(@Path("id_denda") id_denda: Int, @Body dataCatatanDenda: Map<String, String>)

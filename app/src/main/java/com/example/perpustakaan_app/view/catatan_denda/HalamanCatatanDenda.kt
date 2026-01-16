@@ -37,7 +37,6 @@ fun HalamanCatatanDenda(
     modifier: Modifier = Modifier,
     viewModel: CatatanDendaViewModel = viewModel(factory = PenyediaViewModel.Factory)
 ) {
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val snackbarHostState = remember { SnackbarHostState() }
     val pesanBar by viewModel.pesanBar.collectAsState()
     var selectedDendaId by remember { mutableStateOf<Int?>(null) }
@@ -56,7 +55,7 @@ fun HalamanCatatanDenda(
     }
 
     Scaffold(
-        modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = modifier,
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { innerPadding ->
 

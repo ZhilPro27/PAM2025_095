@@ -62,10 +62,8 @@ fun HalamanTambahBuku(
         // Tampilkan layar Scanner Full Screen
         BarcodeScannerScreen(
             onIsbnScanned = { scannedIsbn ->
-                // Saat ISBN ditemukan, update state ViewModel dan tutup kamera
-                viewModel.updateUiState(
-                    viewModel.uiStateBuku.detailBuku.copy(isbn = scannedIsbn)
-                )
+                // Saat ISBN ditemukan, cari data buku di Google Books
+                viewModel.getGoogleBook(scannedIsbn)
                 showCamera = false
             },
             onCancel = { showCamera = false }

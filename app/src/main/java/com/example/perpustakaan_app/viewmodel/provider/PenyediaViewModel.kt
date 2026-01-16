@@ -45,7 +45,8 @@ object PenyediaViewModel {
         // Buku
         initializer {
             TambahBukuViewModel(
-                aplikasiPerpustakaan().containerApp.repositoryDataBuku
+                aplikasiPerpustakaan().containerApp.repositoryDataBuku,
+                aplikasiPerpustakaan().containerApp.repositoryGoogleBooks
             )
         }
         initializer {

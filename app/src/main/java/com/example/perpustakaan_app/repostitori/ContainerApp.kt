@@ -8,6 +8,7 @@ import com.example.perpustakaan_app.apiservices.ServiceApiBuku
 import com.example.perpustakaan_app.apiservices.ServiceApiCatatanDenda
 import com.example.perpustakaan_app.apiservices.ServiceApiPeminjamanBuku
 import com.example.perpustakaan_app.apiservices.ServiceApiProfil
+import com.example.perpustakaan_app.apiservices.ServiceApiGoogleBooks
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -26,6 +27,7 @@ interface ContainerApp{
     val repositoryDataPeminjamanBuku: RepositoryDataPeminjamanBuku
     val repositoryDataCatatanDenda: RepositoryDataCatatanDenda
     val repositoryDataProfil: RepositoryDataProfil
+    val repositoryGoogleBooks: RepositoryGoogleBooks
 }
 
 class DefaultContainerApp(private val context: Context) : ContainerApp {
@@ -127,6 +129,26 @@ class DefaultContainerApp(private val context: Context) : ContainerApp {
 
     override val repositoryDataProfil: RepositoryDataProfil by lazy {
         JaringanRepositoryDataProfil(retrofitServiceProfil)
+    }
+
+    private val retrofitGoogleBooks: Retrofit = Retrofit.Builder()
+        .baseUrl("https://www.googleapis.com/books/v1/")
+        .addConverterFactory(
+            Json {
+                ignoreUnknownKeys = true
+                prettyPrint = true
+                isLenient = true
+            }.asConverterFactory("application/json".toMediaType())
+        )
+        .client(OkHttpClient.Builder().addInterceptor(logging).build())
+        .build()
+
+    private val retrofitServiceGoogleBooks: ServiceApiGoogleBooks by lazy {
+        retrofitGoogleBooks.create(ServiceApiGoogleBooks::class.java)
+    }
+
+    override val repositoryGoogleBooks: RepositoryGoogleBooks by lazy {
+        NetworkRepositoryGoogleBooks(retrofitServiceGoogleBooks)
     }
 }
 

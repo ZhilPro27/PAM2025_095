@@ -16,8 +16,11 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -43,6 +46,7 @@ fun HalamanEditBuku(
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    var showCamera by remember { mutableStateOf(false) }
 
     val photoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
@@ -56,53 +60,66 @@ fun HalamanEditBuku(
             snackbarHostState.showSnackbar(pesan)
         }
     }
+    if (showCamera) {
+        // Tampilkan layar Scanner Full Screen
+        BarcodeScannerScreen(
+            onIsbnScanned = { scannedIsbn ->
+                // Saat ISBN ditemukan, update state ViewModel dan tutup kamera
+                viewModel.updateUiState(
+                    viewModel.uiStateBuku.detailBuku.copy(isbn = scannedIsbn)
+                )
+                showCamera = false
+            },
+            onCancel = { showCamera = false }
+        )
+    } else {
+        Box(modifier = Modifier.fillMaxSize()) {
 
-    Box(modifier = Modifier.fillMaxSize()) {
-
-        Scaffold(
-            modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-            topBar = {
-                PerpustakaanTopAppBar(
-                    title = DestinasiEditBuku.tittleRes,
-                    canNavigateBack = true,
-                    scrollBehavior = scrollBehavior,
-                    navigateUp = navigateBack
+            Scaffold(
+                modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+                topBar = {
+                    PerpustakaanTopAppBar(
+                        title = DestinasiEditBuku.tittleRes,
+                        canNavigateBack = true,
+                        scrollBehavior = scrollBehavior,
+                        navigateUp = navigateBack
+                    )
+                }
+            ) { innerPadding ->
+                // Kita reuse BodyTambahBuku tapi untuk edit
+                BodyTambahBuku(
+                    uiStateBuku = viewModel.uiStateBuku,
+                    selectedImageUri = viewModel.selectedImageUri,
+                    onImagePick = {
+                        photoPickerLauncher.launch(
+                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                        )
+                    },
+                    onValueChange = viewModel::updateUiState,
+                    onSaveClick = {
+                        coroutineScope.launch {
+                            val isSuccess = viewModel.updateBuku(context)
+                            if (isSuccess) {
+                                // JIKA SUKSES: Panggil callback khusus ini
+                                onSuccess()
+                            }
+                        }
+                    },
+                    onScanClick = { showCamera = true },
+                    modifier = Modifier
+                        .padding(innerPadding)
+                        .verticalScroll(rememberScrollState())
+                        .fillMaxWidth()
                 )
             }
-        ) { innerPadding ->
-            // Kita reuse BodyTambahBuku tapi untuk edit
-            BodyTambahBuku(
-                uiStateBuku = viewModel.uiStateBuku,
-                selectedImageUri = null, // Edit gambar sementara kita disable/null dulu
-                onImagePick = {
-                    photoPickerLauncher.launch(
-                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                    )
-                },
-                onValueChange = viewModel::updateUiState,
-                onSaveClick = {
-                    coroutineScope.launch {
-                        val isSuccess = viewModel.updateBuku(context)
-                        if (isSuccess) {
-                            // JIKA SUKSES: Panggil callback khusus ini
-                            onSuccess()
-                        }
-                    }
-                },
-                onScanClick = { /* Opsional: Bisa tambah scanner juga di sini */ },
+
+            WidgetSnackbarKeren(
+                hostState = snackbarHostState,
                 modifier = Modifier
-                    .padding(innerPadding)
-                    .verticalScroll(rememberScrollState())
-                    .fillMaxWidth()
+                    .align(Alignment.TopCenter)
+                    .statusBarsPadding()
+                    .padding(top = 10.dp)
             )
         }
-
-        WidgetSnackbarKeren(
-            hostState = snackbarHostState,
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .statusBarsPadding()
-                .padding(top = 10.dp)
-        )
     }
 }

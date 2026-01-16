@@ -3,6 +3,7 @@ package com.example.perpustakaan_app.apiservices
 import com.example.perpustakaan_app.modeldata.DataCatatanDenda
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -17,6 +18,6 @@ interface ServiceApiCatatanDenda {
     @GET("denda/search")
     suspend fun getCatatanDendaByKeyword(@Query("keyword") keyword: String): List<DataCatatanDenda>
 
-    @PUT("denda/update/{id_denda}")
-    suspend fun putCatatanDenda(@Query("id_denda") id_denda: Int, @Body dataCatatanDenda: DataCatatanDenda)
+    @POST("denda/status/{id_denda}")
+    suspend fun putCatatanDenda(@Path("id_denda") id_denda: Int, @Body dataCatatanDenda: Map<String, String>)
 }

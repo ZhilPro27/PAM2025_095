@@ -1,5 +1,7 @@
 package com.example.perpustakaan_app.modeldata
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.example.perpustakaan_app.utils.konversiTanggalServerKeLokal
 import kotlinx.serialization.Serializable
 
@@ -45,12 +47,14 @@ fun DetailPeminjamanBuku.toDataPeminjamanBuku() : DataPeminjamanBuku = DataPemin
     judul = judul
 )
 
+@RequiresApi(Build.VERSION_CODES.O)
 fun DataPeminjamanBuku.toUiStatePeminjamanBuku(isEntryValid: Boolean = false) : UIStatePeminjamanBuku =
     UIStatePeminjamanBuku (
         detailPeminjamanBuku = this.toDetailPeminjamanBuku(),
         isEntryValid = isEntryValid
 )
 
+@RequiresApi(Build.VERSION_CODES.O)
 fun DataPeminjamanBuku.toDetailPeminjamanBuku() : DetailPeminjamanBuku = DetailPeminjamanBuku (
     id_peminjaman = id_peminjaman,
     id_anggota = id_anggota,

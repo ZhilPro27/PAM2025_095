@@ -280,7 +280,9 @@ fun PetaNavigasi(
 
                 // --- 5. RUTE DENDA ---
                 composable(DestinasiCatatanDenda.route) {
-                    HalamanCatatanDenda()
+                    HalamanCatatanDenda(
+                        navigateBack = { navController.popBackStack() }
+                    )
                 }
 
                 composable(DestinasiProfil.route) {

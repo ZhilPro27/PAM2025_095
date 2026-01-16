@@ -9,7 +9,8 @@ data class DataCatatanDenda(
     val jumlah: Int,
     val hari_terlambat: Int,
     val status: String,
-    val tanggal_dibayar: String
+    val tanggal_dibayar: String? = null,
+    val nama: String? = null
 )
 
 data class UIStateCatatanDenda(
@@ -23,7 +24,8 @@ data class DetailCatatanDenda(
     val jumlah: Int = 0,
     val hari_terlambat: Int = 0,
     val status: String = "",
-    val tanggal_dibayar: String = ""
+    val tanggal_dibayar: String = "",
+    val nama: String = ""
 )
 
 fun DetailCatatanDenda.toDataCatatanDenda() : DataCatatanDenda = DataCatatanDenda(
@@ -32,6 +34,7 @@ fun DetailCatatanDenda.toDataCatatanDenda() : DataCatatanDenda = DataCatatanDend
     jumlah = jumlah,
     hari_terlambat = hari_terlambat,
     status = status,
-    tanggal_dibayar = tanggal_dibayar
+    tanggal_dibayar = if (tanggal_dibayar.isBlank()) null else tanggal_dibayar,
+    nama = nama
 )
 

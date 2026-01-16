@@ -13,6 +13,7 @@ import com.example.perpustakaan_app.viewmodel.anggota.TambahAnggotaViewModel
 import com.example.perpustakaan_app.viewmodel.buku.TambahBukuViewModel
 import com.example.perpustakaan_app.viewmodel.buku.BukuViewModel
 import com.example.perpustakaan_app.viewmodel.buku.EditBukuViewModel
+import com.example.perpustakaan_app.viewmodel.catatan_denda.CatatanDendaViewModel
 import com.example.perpustakaan_app.viewmodel.login.LoginViewModel
 import com.example.perpustakaan_app.viewmodel.peminjaman_buku.EditPeminjamanBukuViewModel
 import com.example.perpustakaan_app.viewmodel.peminjaman_buku.PeminjamanBukuViewModel
@@ -94,6 +95,12 @@ object PenyediaViewModel {
                 aplikasiPerpustakaan().containerApp.repositoryDataPeminjamanBuku,
                 aplikasiPerpustakaan().containerApp.repositoryDataAnggota,
                 aplikasiPerpustakaan().containerApp.repositoryDataBuku
+            )
+        }
+
+        initializer {
+            CatatanDendaViewModel(
+                aplikasiPerpustakaan().containerApp.repositoryDataCatatanDenda
             )
         }
         // Nanti kamu bisa tambahkan initializer untuk ViewModel lain di sini

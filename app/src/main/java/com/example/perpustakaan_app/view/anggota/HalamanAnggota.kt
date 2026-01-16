@@ -1,12 +1,15 @@
 package com.example.perpustakaan_app.view.anggota
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -21,6 +24,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -35,6 +39,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -45,6 +50,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -57,7 +64,7 @@ import com.example.perpustakaan_app.viewmodel.AppViewModel
 import com.example.perpustakaan_app.viewmodel.anggota.AnggotaUiState
 import com.example.perpustakaan_app.viewmodel.anggota.AnggotaViewModel
 import com.example.perpustakaan_app.viewmodel.provider.PenyediaViewModel
-import com.example.perpustakaan_app.ui.theme.PerpustakaanNavyTheme
+import com.example.perpustakaan_app.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -102,59 +109,62 @@ fun HalamanAnggota(
         }
     }
 
-    PerpustakaanNavyTheme {
-        Box(modifier = Modifier.fillMaxSize()){
-            Scaffold(
-                modifier = Modifier,
-                floatingActionButton = {
-                    FloatingActionButton(
-                        onClick = navigateToItemEntry,
-                        shape = MaterialTheme.shapes.medium
-                    ) {
-                        Icon(imageVector = Icons.Default.Add, contentDescription = "Tambah Anggota")
-                    }
+    Box(modifier = Modifier.fillMaxSize()){
+        Scaffold(
+            modifier = Modifier,
+            floatingActionButton = {
+                FloatingActionButton(
+                    onClick = navigateToItemEntry,
+                    shape = MaterialTheme.shapes.medium,
+                    containerColor = colorResource(id = R.color.navy)
+                ) {
+                    Icon(imageVector = Icons.Default.Add,
+                        contentDescription = "Tambah Anggota",
+                        tint = colorResource(id = R.color.white))
                 }
-            ){ innerPadding ->
-                if(openDialog && selectedAnggotaId != null){
-                    DeleteConfirmationDialog(
-                        onDeleteConfirm = {
-                            selectedAnggotaId?.let { id ->
-                                viewModel.deleteAnggota(id)
-                            }
-                            openDialog = false
-                            selectedAnggotaId = null
-                        },
-                        onDeleteCancel = {
-                            openDialog = false
-                            selectedAnggotaId = null
+            }
+        ){
+            if(openDialog && selectedAnggotaId != null){
+                DeleteConfirmationDialog(
+                    onDeleteConfirm = {
+                        selectedAnggotaId?.let { id ->
+                            viewModel.deleteAnggota(id)
                         }
-                    )
-                }
-
-                BodyHalamanAnggota(
-                    anggotaUiState = viewModel.anggotaUiState,
-                    retryAction = viewModel::getAnggota,
-                    onEditClick = onEditClick,
-                    onLogout = { appViewModel.logout() },
-                    onDelete = { id_anggota ->
-                        selectedAnggotaId = id_anggota
-                        openDialog = true
+                        openDialog = false
+                        selectedAnggotaId = null
                     },
-                    searchQuery = viewModel.searchQuery,
-                    onQueryChange = viewModel::updateSearchQuery,
-                    onSearch = { viewModel.searchAnggota() },
-                    modifier = Modifier.padding(innerPadding)
+                    onDeleteCancel = {
+                        openDialog = false
+                        selectedAnggotaId = null
+                    }
                 )
             }
 
-            WidgetSnackbarKeren(
-                hostState = snackbarHostState,
+            BodyHalamanAnggota(
+                anggotaUiState = viewModel.anggotaUiState,
+                retryAction = viewModel::getAnggota,
+                onEditClick = onEditClick,
+                onLogout = { appViewModel.logout() },
+                onDelete = { id_anggota ->
+                    selectedAnggotaId = id_anggota
+                    openDialog = true
+                },
+                searchQuery = viewModel.searchQuery,
+                onQueryChange = viewModel::updateSearchQuery,
+                onSearch = { viewModel.searchAnggota() },
                 modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .statusBarsPadding()
-                    .padding(top = 10.dp)
+                    .background(colorResource(R.color.white))
+                    .fillMaxSize()
             )
         }
+
+        WidgetSnackbarKeren(
+            hostState = snackbarHostState,
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .statusBarsPadding()
+                .padding(top = 10.dp)
+        )
     }
 }
 
@@ -172,6 +182,7 @@ fun BodyHalamanAnggota(
 ){
     Column(modifier = modifier
         .fillMaxSize()
+        .background(colorResource(id = R.color.white))
     ) {
         SearchAnggotaBar(
             query = searchQuery,
@@ -179,6 +190,7 @@ fun BodyHalamanAnggota(
             onSearch = onSearch,
             modifier = Modifier.padding(top = 0.dp, start = 16.dp, end = 16.dp, bottom = 0.dp)
         )
+        Spacer(modifier = Modifier.height(16.dp))
         when (anggotaUiState) {
             is AnggotaUiState.Loading -> LoadingScreen(modifier)
             is AnggotaUiState.Success -> {
@@ -191,13 +203,15 @@ fun BodyHalamanAnggota(
                         anggotaList = anggotaUiState.anggota,
                         onDelete = onDelete,
                         onEditClick = onEditClick,
-                        modifier = modifier
+                        modifier = modifier.fillMaxSize()
+                            .background(colorResource(id = R.color.white))
                     )
                 }
             }
             is AnggotaUiState.Error -> {
                 Column(
-                    modifier = modifier.fillMaxSize(),
+                    modifier = modifier.fillMaxSize()
+                        .background(colorResource(id = R.color.white)),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -239,7 +253,14 @@ fun ItemAnggota(
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        colors = CardDefaults.cardColors(
+            containerColor = colorResource(id = R.color.white)
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 3.dp,
+            pressedElevation = 7.dp,
+            draggedElevation = 7.dp
+        )
     ) {
         Row(
             modifier = Modifier
@@ -250,23 +271,30 @@ fun ItemAnggota(
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = anggota.nama,
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
+                    fontFamily = FontFamily.SansSerif
                 )
                 Text(
                     text = "Nomor HP: ${anggota.no_hp}",
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontFamily = FontFamily.SansSerif
                 )
                 Text(
                     text = "Alamat: ${anggota.alamat}",
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontFamily = FontFamily.SansSerif
                 )
             }
             IconButton(onClick = { onEditClick(anggota.id_anggota) }) {
-                Icon(Icons.Default.Edit, contentDescription = "Edit")
+                Icon(Icons.Default.Edit,
+                    contentDescription = "Edit",
+                    tint = colorResource(id = R.color.info))
             }
 
             IconButton(onClick = { onDelete(anggota.id_anggota) }) {
-                Icon(Icons.Default.Delete, contentDescription = "Hapus")
+                Icon(Icons.Default.Delete,
+                    contentDescription = "Hapus",
+                    tint = colorResource(id = R.color.error))
             }
         }
     }
@@ -288,6 +316,22 @@ fun SearchAnggotaBar(
     modifier: Modifier = Modifier
 ) {
     OutlinedTextField(
+        colors = TextFieldDefaults.colors(
+            focusedTextColor = colorResource(id = R.color.navy),
+            unfocusedTextColor = colorResource(id = R.color.navy),
+
+            focusedTrailingIconColor = colorResource(id = R.color.navy),
+            unfocusedTrailingIconColor = colorResource(id = R.color.navy),
+
+            focusedLabelColor = colorResource(id = R.color.navy),
+            unfocusedLabelColor = colorResource(id = R.color.navy),
+
+            focusedPlaceholderColor = colorResource(id = R.color.navy),
+            unfocusedPlaceholderColor = colorResource(id = R.color.navy),
+
+            focusedContainerColor = colorResource(id = R.color.white),
+            unfocusedContainerColor = colorResource(id = R.color.white)
+        ),
         value = query,
         onValueChange = onQueryChange,
         label = { Text("Cari nama") },
@@ -320,13 +364,17 @@ private fun DeleteConfirmationDialog(
         text = { Text("Apakah Anda yakin ingin menghapus anggota ini? Data yang dihapus tidak dapat dikembalikan.") },
         modifier = modifier,
         dismissButton = {
-            TextButton(onClick = onDeleteCancel) {
+            TextButton(onClick = onDeleteCancel,
+                colors = ButtonDefaults.textButtonColors(
+                    contentColor = colorResource(R.color.navy)
+                )) {
                 Text(text = "Batal")
             }
         },
         confirmButton = {
             TextButton(onClick = onDeleteConfirm) {
-                Text(text = "Ya, Hapus", color = MaterialTheme.colorScheme.error)
+                Text(text = "Ya, Hapus",
+                    color = colorResource(R.color.error))
             }
         }
     )

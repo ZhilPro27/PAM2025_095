@@ -1,5 +1,6 @@
 package com.example.perpustakaan_app.view.anggota
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,6 +9,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -21,9 +23,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.perpustakaan_app.R
 import com.example.perpustakaan_app.modeldata.DetailAnggota
 import com.example.perpustakaan_app.modeldata.UIStateAnggota
 import com.example.perpustakaan_app.uicontroller.route.anggota.DestinasiTambahAnggota
@@ -79,6 +83,7 @@ fun HalamanTambahAnggota(
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
                 .fillMaxWidth()
+                .background(colorResource(R.color.white))
         )
     }
 }
@@ -101,7 +106,11 @@ fun BodyTambahAnggota(
         Button(
             onClick = onSaveClick,
             enabled = uiStateAnggota.isEntryValid,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = colorResource(id = R.color.navy),
+                contentColor = colorResource(id = R.color.white)
+            )
         ) {
             Text("Simpan Anggota")
         }
@@ -118,7 +127,7 @@ fun FormInputAnggota(
         OutlinedTextField(
             value = detailAnggota.nama,
             onValueChange = { onValueChange(detailAnggota.copy(nama = it)) },
-            label = { Text("Nama") },
+            label = { Text("Nama*") },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
@@ -131,7 +140,7 @@ fun FormInputAnggota(
                     }
                 }
             },
-            label = { Text("No HP") },
+            label = { Text("No HP*") },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
@@ -139,7 +148,7 @@ fun FormInputAnggota(
         OutlinedTextField(
             value = detailAnggota.alamat,
             onValueChange = { onValueChange(detailAnggota.copy(alamat = it)) },
-            label = { Text("Alamat") },
+            label = { Text("Alamat*") },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )

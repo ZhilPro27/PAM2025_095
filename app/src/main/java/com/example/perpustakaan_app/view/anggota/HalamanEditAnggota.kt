@@ -1,5 +1,6 @@
 package com.example.perpustakaan_app.view.anggota
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,7 +18,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.perpustakaan_app.R
 import com.example.perpustakaan_app.uicontroller.route.anggota.DestinasiEditAnggota
 import com.example.perpustakaan_app.view.PerpustakaanTopAppBar
 import com.example.perpustakaan_app.viewmodel.anggota.EditAnggotaViewModel
@@ -71,6 +74,7 @@ fun HalamanEditAnggota(
                     .padding(innerPadding)
                     .verticalScroll(rememberScrollState())
                     .fillMaxWidth()
+                    .background(colorResource(R.color.white))
             )
         }
     }

@@ -261,19 +261,19 @@ fun ItemBuku(
                     text = buku.judul,
                     style = MaterialTheme.typography.titleMedium,
                     fontSize = 18.sp,
-                    fontFamily = FontFamily.SansSerif
+                    fontFamily = FontFamily.Default
                 )
                 Text(
                     text = "Penulis: ${buku.penulis}",
                     style = MaterialTheme.typography.bodyMedium,
                     fontSize = 14.sp,
-                    fontFamily = FontFamily.SansSerif
+                    fontFamily = FontFamily.Default
                 )
                 Text(
                     text = "Stok: ${buku.stok}",
                     style = MaterialTheme.typography.bodyMedium,
                     fontSize = 14.sp,
-                    fontFamily = FontFamily.SansSerif
+                    fontFamily = FontFamily.Default
                 )
             }
             IconButton(onClick = { onEditClick(buku.id_buku) }) {

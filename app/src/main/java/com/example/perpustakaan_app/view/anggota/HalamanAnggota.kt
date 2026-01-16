@@ -272,17 +272,17 @@ fun ItemAnggota(
                 Text(
                     text = anggota.nama,
                     style = MaterialTheme.typography.titleMedium,
-                    fontFamily = FontFamily.SansSerif
+                    fontFamily = FontFamily.Default
                 )
                 Text(
                     text = "Nomor HP: ${anggota.no_hp}",
                     style = MaterialTheme.typography.bodyMedium,
-                    fontFamily = FontFamily.SansSerif
+                    fontFamily = FontFamily.Default
                 )
                 Text(
                     text = "Alamat: ${anggota.alamat}",
                     style = MaterialTheme.typography.bodyMedium,
-                    fontFamily = FontFamily.SansSerif
+                    fontFamily = FontFamily.Default
                 )
             }
             IconButton(onClick = { onEditClick(anggota.id_anggota) }) {

@@ -57,6 +57,7 @@ import com.example.perpustakaan_app.viewmodel.AppViewModel
 import com.example.perpustakaan_app.viewmodel.anggota.AnggotaUiState
 import com.example.perpustakaan_app.viewmodel.anggota.AnggotaViewModel
 import com.example.perpustakaan_app.viewmodel.provider.PenyediaViewModel
+import com.example.perpustakaan_app.ui.theme.PerpustakaanNavyTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -101,58 +102,59 @@ fun HalamanAnggota(
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize()){
-        Scaffold(
-            modifier = Modifier,
-            floatingActionButton = {
-                FloatingActionButton(
-                    onClick = navigateToItemEntry,
-                    shape = MaterialTheme.shapes.medium,
-                    modifier = Modifier.padding(18.dp)
-                ) {
-                    Icon(imageVector = Icons.Default.Add, contentDescription = "Tambah Anggota")
-                }
-            }
-        ){ innerPadding ->
-            if(openDialog && selectedAnggotaId != null){
-                DeleteConfirmationDialog(
-                    onDeleteConfirm = {
-                        selectedAnggotaId?.let { id ->
-                            viewModel.deleteAnggota(id)
-                        }
-                        openDialog = false
-                        selectedAnggotaId = null
-                    },
-                    onDeleteCancel = {
-                        openDialog = false
-                        selectedAnggotaId = null
+    PerpustakaanNavyTheme {
+        Box(modifier = Modifier.fillMaxSize()){
+            Scaffold(
+                modifier = Modifier,
+                floatingActionButton = {
+                    FloatingActionButton(
+                        onClick = navigateToItemEntry,
+                        shape = MaterialTheme.shapes.medium
+                    ) {
+                        Icon(imageVector = Icons.Default.Add, contentDescription = "Tambah Anggota")
                     }
+                }
+            ){ innerPadding ->
+                if(openDialog && selectedAnggotaId != null){
+                    DeleteConfirmationDialog(
+                        onDeleteConfirm = {
+                            selectedAnggotaId?.let { id ->
+                                viewModel.deleteAnggota(id)
+                            }
+                            openDialog = false
+                            selectedAnggotaId = null
+                        },
+                        onDeleteCancel = {
+                            openDialog = false
+                            selectedAnggotaId = null
+                        }
+                    )
+                }
+
+                BodyHalamanAnggota(
+                    anggotaUiState = viewModel.anggotaUiState,
+                    retryAction = viewModel::getAnggota,
+                    onEditClick = onEditClick,
+                    onLogout = { appViewModel.logout() },
+                    onDelete = { id_anggota ->
+                        selectedAnggotaId = id_anggota
+                        openDialog = true
+                    },
+                    searchQuery = viewModel.searchQuery,
+                    onQueryChange = viewModel::updateSearchQuery,
+                    onSearch = { viewModel.searchAnggota() },
+                    modifier = Modifier.padding(innerPadding)
                 )
             }
 
-            BodyHalamanAnggota(
-                anggotaUiState = viewModel.anggotaUiState,
-                retryAction = viewModel::getAnggota,
-                onEditClick = onEditClick,
-                onLogout = { appViewModel.logout() },
-                onDelete = { id_anggota ->
-                    selectedAnggotaId = id_anggota
-                    openDialog = true
-                },
-                searchQuery = viewModel.searchQuery,
-                onQueryChange = viewModel::updateSearchQuery,
-                onSearch = { viewModel.searchAnggota() },
-                modifier = Modifier.padding(innerPadding)
+            WidgetSnackbarKeren(
+                hostState = snackbarHostState,
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .statusBarsPadding()
+                    .padding(top = 10.dp)
             )
         }
-
-        WidgetSnackbarKeren(
-            hostState = snackbarHostState,
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .statusBarsPadding()
-                .padding(top = 10.dp)
-        )
     }
 }
 
@@ -169,14 +171,13 @@ fun BodyHalamanAnggota(
     modifier: Modifier = Modifier
 ){
     Column(modifier = modifier
-        .statusBarsPadding()
         .fillMaxSize()
     ) {
         SearchAnggotaBar(
             query = searchQuery,
             onQueryChange = onQueryChange,
             onSearch = onSearch,
-            modifier = Modifier.padding(5.dp)
+            modifier = Modifier.padding(top = 0.dp, start = 16.dp, end = 16.dp, bottom = 0.dp)
         )
         when (anggotaUiState) {
             is AnggotaUiState.Loading -> LoadingScreen(modifier)
@@ -220,7 +221,7 @@ fun ListAnggota(
 ) {
     LazyColumn(
         modifier = modifier,
-        contentPadding = PaddingValues(16.dp),
+        contentPadding = PaddingValues(top = 0.dp, start = 16.dp, end = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(anggotaList) { anggota ->

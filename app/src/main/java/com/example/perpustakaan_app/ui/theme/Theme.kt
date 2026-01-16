@@ -33,6 +33,17 @@ private val LightColorScheme = lightColorScheme(
     */
 )
 
+private val NavyColorScheme = lightColorScheme(
+    primary = NavyAsli,
+    onPrimary = Putih,
+    secondary = AbuTerang,
+    onSecondary = NavyAsli,
+    background = AbuTerang,
+    onBackground = NavyAsli,
+    surface = Putih,
+    onSurface = NavyAsli
+)
+
 @Composable
 fun Perpustakaan_appTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -52,6 +63,17 @@ fun Perpustakaan_appTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
+        typography = Typography,
+        content = content
+    )
+}
+
+@Composable
+fun PerpustakaanNavyTheme(
+    content: @Composable () -> Unit
+) {
+    MaterialTheme(
+        colorScheme = NavyColorScheme,
         typography = Typography,
         content = content
     )

@@ -3,6 +3,7 @@ package com.example.perpustakaan_app.view.buku
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,8 +26,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.perpustakaan_app.R
 import com.example.perpustakaan_app.uicontroller.route.buku.DestinasiEditBuku
 import com.example.perpustakaan_app.utils.WidgetSnackbarKeren
 import com.example.perpustakaan_app.view.PerpustakaanTopAppBar
@@ -110,6 +113,7 @@ fun HalamanEditBuku(
                         .padding(innerPadding)
                         .verticalScroll(rememberScrollState())
                         .fillMaxWidth()
+                        .background(colorResource(R.color.white))
                 )
             }
 

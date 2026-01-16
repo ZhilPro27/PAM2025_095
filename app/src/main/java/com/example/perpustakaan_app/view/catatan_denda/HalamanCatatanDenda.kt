@@ -19,6 +19,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.perpustakaan_app.modeldata.DataCatatanDenda
@@ -102,14 +103,13 @@ fun BodyCatatanDenda(
 ) {
     Column(
         modifier = Modifier
-            .statusBarsPadding()
             .fillMaxSize()
     ){
         SearchDendaBar(
             query = searchQuery,
             onQueryChange = onQueryChange,
             onSearch = onSearch,
-            modifier = Modifier.padding(5.dp)
+            modifier = Modifier.padding(top = 0.dp, start = 16.dp, end = 16.dp, bottom = 0.dp)
         )
         when (dendaUiState) {
             is CatatanDendaUiState.Loading -> {
@@ -152,8 +152,8 @@ fun ListCatatanDenda(
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
-        modifier = modifier,
-        contentPadding = PaddingValues(16.dp),
+        modifier = modifier.fillMaxSize(),
+        contentPadding = PaddingValues(start = 16.dp , end = 16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         items(listDenda) { denda ->
@@ -181,7 +181,7 @@ fun ItemDenda(
         )
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -302,4 +302,60 @@ private fun DendaConfirmationDialog(
             }
         }
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun HalamanCatatanDendaPreview() {
+    HalamanCatatanDenda(navigateBack = {},
+        viewModel = viewModel(factory = PenyediaViewModel.Factory))
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ItemDendaPreview(){
+    ItemDenda(denda = DataCatatanDenda(
+        id_denda = 1,
+        nama = "tes",
+        hari_terlambat = 1,
+        jumlah = 10000,
+        status = "Belum Lunas",
+        tanggal_dibayar = null,
+        id_peminjaman = 1
+    ), onUpdateStatus = {})
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ListCatatanDenda() {
+    ListCatatanDenda(listDenda = listOf(
+        DataCatatanDenda(
+            id_denda = 1,
+            nama = "tes",
+            hari_terlambat = 1,
+            jumlah = 10000,
+            status = "Belum Lunas",
+            tanggal_dibayar = null,
+            id_peminjaman = 1
+        ),
+        DataCatatanDenda(
+            id_denda = 2,
+            nama = "tes",
+            hari_terlambat = 1,
+            jumlah = 10000,
+            status = "Belum Lunas",
+            tanggal_dibayar = null,
+            id_peminjaman = 1
+        )
+    ), onUpdateStatus = {})
+}
+
+@Preview(showBackground = true)
+@Composable
+fun SearchDendaBarPreview() {
+    SearchDendaBar(
+        query = "",
+        onQueryChange = {},
+        onSearch = {},
+        modifier = Modifier.padding(16.dp))
 }

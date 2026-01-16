@@ -25,10 +25,15 @@ import kotlinx.coroutines.launch
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import coil.compose.AsyncImage
 import com.example.perpustakaan_app.utils.WidgetSnackbarKeren
+import com.example.perpustakaan_app.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -71,7 +76,8 @@ fun HalamanTambahBuku(
     } else {
         Scaffold(
             snackbarHost = { WidgetSnackbarKeren(hostState = snackbarHostState) },
-            modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+            modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+                .background(colorResource(R.color.white)),
             topBar = {
                 PerpustakaanTopAppBar(
                     title = DestinasiTambahBuku.tittleRes,
@@ -103,6 +109,7 @@ fun HalamanTambahBuku(
                     .padding(innerPadding)
                     .verticalScroll(rememberScrollState())
                     .fillMaxWidth()
+                    .background(colorResource(R.color.white))
             )
 
         }
@@ -120,24 +127,31 @@ fun BodyTambahBuku(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier.padding(16.dp),
+        modifier = modifier.padding(16.dp)
+            .background(colorResource(R.color.white)),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxWidth()
+
         ) {
             if (selectedImageUri != null) {
                 AsyncImage(
                     model = selectedImageUri,
                     contentDescription = "Preview Gambar",
                     modifier = Modifier.size(150.dp)
+                        .clip(RoundedCornerShape(8.dp))
                 )
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Button(onClick = onImagePick) {
+            Button(onClick = onImagePick,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colorResource(R.color.navy),
+                    contentColor = colorResource(R.color.white)
+                )) {
                 Text("Pilih Gambar Buku")
             }
         }
@@ -149,7 +163,11 @@ fun BodyTambahBuku(
         Button(
             onClick = onSaveClick,
             enabled = uiStateBuku.isEntryValid,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = colorResource(R.color.navy),
+                contentColor = colorResource(R.color.white)
+            )
         ) {
             Text("Simpan Buku")
         }
@@ -164,13 +182,16 @@ fun FormInputBuku(
     onScanClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(16.dp)) {
+    Column(modifier = modifier
+        .background(colorResource(R.color.white)),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
 
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             OutlinedTextField(
                 value = detailBuku.isbn,
                 onValueChange = { onValueChange(detailBuku.copy(isbn = it)) },
-                label = { Text("ISBN") },
+                label = { Text("ISBN*") },
                 modifier = Modifier.weight(1f),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
@@ -179,28 +200,30 @@ fun FormInputBuku(
                 onClick = onScanClick,
                 modifier = Modifier.padding(top = 8.dp)
             ) {
-                Icon(imageVector = Icons.Default.CameraAlt, contentDescription = "Scan ISBN")
+                Icon(imageVector = Icons.Default.CameraAlt,
+                    contentDescription = "Scan ISBN",
+                    tint = colorResource(R.color.navy))
             }
         }
 
         OutlinedTextField(
             value = detailBuku.judul,
             onValueChange = { onValueChange(detailBuku.copy(judul = it)) },
-            label = { Text("Judul Buku") },
+            label = { Text("Judul Buku*") },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
         OutlinedTextField(
             value = detailBuku.penulis,
             onValueChange = { onValueChange(detailBuku.copy(penulis = it)) },
-            label = { Text("Penulis") },
+            label = { Text("Penulis*") },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
         OutlinedTextField(
             value = detailBuku.penerbit,
             onValueChange = { onValueChange(detailBuku.copy(penerbit = it)) },
-            label = { Text("Penerbit") },
+            label = { Text("Penerbit*") },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
@@ -213,7 +236,7 @@ fun FormInputBuku(
                     }
                 }
             },
-            label = { Text("Tahun Terbit") },
+            label = { Text("Tahun Terbit*") },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
@@ -224,7 +247,7 @@ fun FormInputBuku(
                 val stokBaru = it.toIntOrNull() ?: 0
                 onValueChange(detailBuku.copy(stok = stokBaru))
             },
-            label = { Text("Stok") },
+            label = { Text("Stok*") },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)

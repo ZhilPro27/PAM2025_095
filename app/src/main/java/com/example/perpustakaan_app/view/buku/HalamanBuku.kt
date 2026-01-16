@@ -1,8 +1,10 @@
 package com.example.perpustakaan_app.view.buku
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -20,11 +22,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
@@ -34,7 +40,7 @@ import com.example.perpustakaan_app.viewmodel.buku.BukuUiState
 import com.example.perpustakaan_app.viewmodel.buku.BukuViewModel
 import com.example.perpustakaan_app.viewmodel.AppViewModel
 import com.example.perpustakaan_app.viewmodel.provider.PenyediaViewModel
-
+import com.example.perpustakaan_app.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HalamanBuku(
@@ -74,7 +80,9 @@ fun HalamanBuku(
             snackbarHostState.showSnackbar(pesan)
         }
     }
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(colorResource(id = R.color.white))) {
 
         Scaffold(
             modifier = modifier,
@@ -82,12 +90,14 @@ fun HalamanBuku(
                 FloatingActionButton(
                     onClick = navigateToItemEntry,
                     shape = MaterialTheme.shapes.medium,
-                    modifier = Modifier.padding(18.dp)
+                    containerColor = colorResource(id = R.color.navy)
                 ) {
-                    Icon(imageVector = Icons.Default.Add, contentDescription = "Tambah Buku")
+                    Icon(imageVector = Icons.Default.Add,
+                        contentDescription = "Tambah Buku",
+                        tint = colorResource(id = R.color.white))
                 }
             },
-        ) { innerPadding ->
+        ) {
             if (openDialog && selectedBukuId != null) {
                 DeleteConfirmationDialog(
                     onDeleteConfirm = {
@@ -118,7 +128,9 @@ fun HalamanBuku(
                 searchQuery = viewModel.searchQuery,
                 onQueryChange = viewModel::updateSearchQuery,
                 onSearch = { viewModel.searchBuku() },
-                modifier = Modifier.padding(innerPadding)
+                modifier = Modifier
+                    .background(colorResource(R.color.white))
+                    .fillMaxSize()
             )
         }
 
@@ -145,15 +157,16 @@ fun BodyHalamanBuku(
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier
-        .statusBarsPadding()
         .fillMaxSize()
+        .fillMaxHeight()
     ) {
         SearchBukuBar(
             query = searchQuery,
             onQueryChange = onQueryChange,
             onSearch = onSearch,
-            modifier = Modifier.padding(5.dp)
+            modifier = Modifier.padding(top = 0.dp, start = 16.dp, end = 16.dp, bottom = 0.dp)
         )
+        Spacer(modifier = Modifier.height(16.dp))
         when (bukuUiState) {
             is BukuUiState.Loading -> LoadingScreen(modifier)
             is BukuUiState.Success -> {
@@ -196,7 +209,7 @@ fun ListBuku(
 ) {
     LazyColumn(
         modifier = modifier,
-        contentPadding = PaddingValues(16.dp),
+        contentPadding = PaddingValues(top = 0.dp, start = 16.dp, end = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(bukuList) { buku ->
@@ -214,12 +227,19 @@ fun ItemBuku(
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        colors = CardDefaults.cardColors(
+            containerColor = colorResource(id = R.color.white)
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 3.dp,
+            pressedElevation = 7.dp,
+            draggedElevation = 7.dp
+        )
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             val imageUrl = buku.gambar?.let { img ->
@@ -231,32 +251,41 @@ fun ItemBuku(
                 contentDescription = buku.judul,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(80.dp)
-                    .padding(end = 16.dp),
-                //error = painterResource(id = R.drawable.ic_broken_image),
-                //placeholder = painterResource(id = R.drawable.ic_loading)
+                    .size(100.dp)
+                    .padding(end = 16.dp)
+                    .clip(RoundedCornerShape(8.dp))
             )
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = buku.judul,
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
+                    fontSize = 18.sp,
+                    fontFamily = FontFamily.SansSerif
                 )
                 Text(
                     text = "Penulis: ${buku.penulis}",
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontSize = 14.sp,
+                    fontFamily = FontFamily.SansSerif
                 )
                 Text(
                     text = "Stok: ${buku.stok}",
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontSize = 14.sp,
+                    fontFamily = FontFamily.SansSerif
                 )
             }
             IconButton(onClick = { onEditClick(buku.id_buku) }) {
-                Icon(Icons.Default.Edit, contentDescription = "Edit")
+                Icon(Icons.Default.Edit,
+                    contentDescription = "Edit",
+                    tint = colorResource(id = R.color.info))
             }
 
             IconButton(onClick = { onDelete(buku.id_buku) }) {
-                Icon(Icons.Default.Delete, contentDescription = "Hapus")
+                Icon(Icons.Default.Delete,
+                    contentDescription = "Hapus",
+                    tint = colorResource(id = R.color.error))
             }
         }
     }
@@ -269,18 +298,6 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
     }
 }
 
-@Composable
-fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text("Gagal memuat data")
-        Button(onClick = retryAction) { Text("Coba Lagi") }
-    }
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchBukuBar(
@@ -290,6 +307,22 @@ fun SearchBukuBar(
     modifier: Modifier = Modifier
 ) {
     OutlinedTextField(
+        colors = TextFieldDefaults.colors(
+            focusedTextColor = colorResource(id = R.color.navy),
+            unfocusedTextColor = colorResource(id = R.color.navy),
+
+            focusedTrailingIconColor = colorResource(id = R.color.navy),
+            unfocusedTrailingIconColor = colorResource(id = R.color.navy),
+
+            focusedLabelColor = colorResource(id = R.color.navy),
+            unfocusedLabelColor = colorResource(id = R.color.navy),
+
+            focusedPlaceholderColor = colorResource(id = R.color.navy),
+            unfocusedPlaceholderColor = colorResource(id = R.color.navy),
+
+            focusedContainerColor = colorResource(id = R.color.white),
+            unfocusedContainerColor = colorResource(id = R.color.white)
+        ),
         value = query,
         onValueChange = onQueryChange,
         label = { Text("Cari judul atau penulis...") },

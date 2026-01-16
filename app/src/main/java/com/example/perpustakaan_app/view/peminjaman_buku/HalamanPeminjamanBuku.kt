@@ -162,13 +162,12 @@ fun BodyHalamanPeminjamanBuku(
     viewModel: PeminjamanBukuViewModel = viewModel(factory = PenyediaViewModel.Factory)
 ){
     Column(modifier = Modifier
-        .statusBarsPadding()
         .fillMaxSize()) {
         SearchPeminjamanBar(
             query = searchQuery,
             onQueryChange = onQueryChange,
             onSearch = onSearch,
-            modifier = Modifier.padding(5.dp)
+            modifier = Modifier.padding(top = 0.dp, start = 16.dp, end = 16.dp, bottom = 0.dp)
         )
         when (peminjamanBukuUiState) {
             is PeminjamanBukuUiState.Loading -> LoadingScreen(modifier)
@@ -207,7 +206,7 @@ fun ListPeminjaman(
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
-        contentPadding = PaddingValues(16.dp),
+        contentPadding = PaddingValues(top = 0.dp, start = 16.dp, end = 16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = modifier
     ) {

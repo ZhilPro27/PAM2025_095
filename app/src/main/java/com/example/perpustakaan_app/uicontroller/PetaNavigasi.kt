@@ -14,6 +14,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -95,7 +96,8 @@ fun PetaNavigasi(
                 ) {
                     PerpustakaanBottomAppBar(
                         navController = navController,
-                        currentRoute = currentRoute
+                        currentRoute = currentRoute,
+                        modifier = modifier.padding(top = 0.dp)
                     )
                 }
             }

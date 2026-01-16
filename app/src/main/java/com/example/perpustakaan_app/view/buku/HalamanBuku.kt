@@ -355,13 +355,17 @@ private fun DeleteConfirmationDialog(
         text = { Text("Apakah Anda yakin ingin menghapus buku ini? Data yang dihapus tidak dapat dikembalikan.") },
         modifier = modifier,
         dismissButton = {
-            TextButton(onClick = onDeleteCancel) {
+            TextButton(onClick = onDeleteCancel,
+                colors = ButtonDefaults.textButtonColors(
+                    contentColor = colorResource(id = R.color.navy)
+                )) {
                 Text(text = "Batal")
             }
         },
         confirmButton = {
             TextButton(onClick = onDeleteConfirm) {
-                Text(text = "Ya, Hapus", color = MaterialTheme.colorScheme.error)
+                Text(text = "Ya, Hapus",
+                    color = colorResource(id = R.color.error))
             }
         }
     )

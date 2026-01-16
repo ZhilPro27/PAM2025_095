@@ -118,7 +118,8 @@ object PenyediaViewModel {
         initializer{
             EditProfilViewModel(
                 this.createSavedStateHandle(),
-                aplikasiPerpustakaan().containerApp.repositoryDataProfil
+                aplikasiPerpustakaan().containerApp.repositoryDataProfil,
+                aplikasiPerpustakaan().containerApp.userPreferences
             )
         }
     }

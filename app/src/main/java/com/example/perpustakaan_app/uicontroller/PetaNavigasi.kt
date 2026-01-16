@@ -297,6 +297,7 @@ fun PetaNavigasi(
                 // --- 6. RUTE PROFIL ---
                 composable(DestinasiProfil.route) {
                     HalamanProfil(
+                        navController = navController,
                         onEditClick = { id ->
                             navController.navigate("${DestinasiEditProfil.route}/$id")
                         },
@@ -325,7 +326,7 @@ fun PetaNavigasi(
                             // Memberi pesan sukses
                             navController.previousBackStackEntry
                                 ?.savedStateHandle
-                                ?.set("pesan_sukses", "Berhasil memperbarui data peminjaman!")
+                                ?.set("pesan_sukses", "Berhasil memperbarui data profil!")
 
                             navController.popBackStack()
                         }

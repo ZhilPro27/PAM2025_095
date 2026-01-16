@@ -37,4 +37,10 @@ class UserPreferences(private val context: Context) {
             preferences.clear()
         }
     }
+
+    suspend fun updateEmail(email: String) {
+        context.dataStore.edit { preferences ->
+            preferences[EMAIL_KEY] = email
+        }
+    }
 }

@@ -11,6 +11,7 @@ import com.example.perpustakaan_app.modeldata.DetailProfil
 import com.example.perpustakaan_app.modeldata.UIStateProfil
 import com.example.perpustakaan_app.modeldata.toUiStateProfil
 import com.example.perpustakaan_app.repostitori.RepositoryDataProfil
+import com.example.perpustakaan_app.repostitori.UserPreferences
 import com.example.perpustakaan_app.uicontroller.route.profil.DestinasiEditProfil
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -18,7 +19,8 @@ import kotlinx.coroutines.launch
 
 class EditProfilViewModel (
     savedStateHandle: SavedStateHandle,
-    private val repositoryDataProfil: RepositoryDataProfil
+    private val repositoryDataProfil: RepositoryDataProfil,
+    private val userPreferences: UserPreferences
 ) : ViewModel() {
     private val _pesanChannel = Channel<String>()
     val pesanChannel = _pesanChannel.receiveAsFlow()
@@ -60,6 +62,7 @@ class EditProfilViewModel (
                 idPustakawan,
                 uiStateProfil.detailProfil
             )
+            userPreferences.updateEmail(uiStateProfil.detailProfil.email)
             _pesanChannel.send("Berhasil memperbarui data profil")
             true
         } catch (e: Exception) {

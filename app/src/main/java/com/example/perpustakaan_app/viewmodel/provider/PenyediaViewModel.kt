@@ -18,6 +18,8 @@ import com.example.perpustakaan_app.viewmodel.login.LoginViewModel
 import com.example.perpustakaan_app.viewmodel.peminjaman_buku.EditPeminjamanBukuViewModel
 import com.example.perpustakaan_app.viewmodel.peminjaman_buku.PeminjamanBukuViewModel
 import com.example.perpustakaan_app.viewmodel.peminjaman_buku.TambahPeminjamanViewModel
+import com.example.perpustakaan_app.viewmodel.profil.EditProfilViewModel
+import com.example.perpustakaan_app.viewmodel.profil.ProfilViewModel
 
 fun CreationExtras.aplikasiPerpustakaan(): AplikasiPerpustakaan =
     (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as AplikasiPerpustakaan)
@@ -98,12 +100,26 @@ object PenyediaViewModel {
             )
         }
 
+        // Catatan Denda
         initializer {
             CatatanDendaViewModel(
                 aplikasiPerpustakaan().containerApp.repositoryDataCatatanDenda
             )
         }
-        // Nanti kamu bisa tambahkan initializer untuk ViewModel lain di sini
-        // (Contoh: AnggotaViewModel, LoginViewModel, dll)
+
+        // Profil
+        initializer {
+            ProfilViewModel(
+                aplikasiPerpustakaan().containerApp.repositoryDataProfil,
+                aplikasiPerpustakaan().containerApp.userPreferences,
+                this.createSavedStateHandle()
+            )
+        }
+        initializer{
+            EditProfilViewModel(
+                this.createSavedStateHandle(),
+                aplikasiPerpustakaan().containerApp.repositoryDataProfil
+            )
+        }
     }
 }

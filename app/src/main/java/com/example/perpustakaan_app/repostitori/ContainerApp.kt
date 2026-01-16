@@ -7,6 +7,7 @@ import com.example.perpustakaan_app.apiservices.ServiceApiAnggota
 import com.example.perpustakaan_app.apiservices.ServiceApiBuku
 import com.example.perpustakaan_app.apiservices.ServiceApiCatatanDenda
 import com.example.perpustakaan_app.apiservices.ServiceApiPeminjamanBuku
+import com.example.perpustakaan_app.apiservices.ServiceApiProfil
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -24,6 +25,7 @@ interface ContainerApp{
     val repositoryDataAnggota: RepositoryDataAnggota
     val repositoryDataPeminjamanBuku: RepositoryDataPeminjamanBuku
     val repositoryDataCatatanDenda: RepositoryDataCatatanDenda
+    val repositoryDataProfil: RepositoryDataProfil
 }
 
 class DefaultContainerApp(private val context: Context) : ContainerApp {
@@ -117,6 +119,14 @@ class DefaultContainerApp(private val context: Context) : ContainerApp {
 
     override val repositoryDataCatatanDenda: RepositoryDataCatatanDenda by lazy {
         JaringanRepositoryDataCatatanDenda(retrofitServiceCatatanDenda)
+    }
+
+    private val retrofitServiceProfil: ServiceApiProfil by lazy {
+        retrofit.create(ServiceApiProfil::class.java)
+    }
+
+    override val repositoryDataProfil: RepositoryDataProfil by lazy {
+        JaringanRepositoryDataProfil(retrofitServiceProfil)
     }
 }
 

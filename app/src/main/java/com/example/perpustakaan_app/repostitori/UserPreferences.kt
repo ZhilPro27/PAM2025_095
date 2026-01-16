@@ -19,6 +19,10 @@ class UserPreferences(private val context: Context) {
     }
     val authToken: Flow<String?> = context.dataStore.data.map { it[TOKEN_KEY] }
     val getUserId: Flow<String?> = context.dataStore.data.map { it[ID_USER_KEY] }
+    val userEmail: Flow<String> = context.dataStore.data
+        .map { preferences ->
+            preferences[EMAIL_KEY] ?: "Email tidak ditemukan"
+        }
 
     suspend fun saveSession(token: String, id: String, email: String) {
         context.dataStore.edit { preferences ->

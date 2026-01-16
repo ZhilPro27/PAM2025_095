@@ -1,5 +1,6 @@
 package com.example.perpustakaan_app.uicontroller
 
+import HalamanProfil
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
@@ -32,6 +33,7 @@ import com.example.perpustakaan_app.uicontroller.route.login.DestinasiLogin
 import com.example.perpustakaan_app.uicontroller.route.peminjaman_buku.DestinasiEditPeminjamanBuku
 import com.example.perpustakaan_app.uicontroller.route.peminjaman_buku.DestinasiPeminjamanBuku
 import com.example.perpustakaan_app.uicontroller.route.peminjaman_buku.DestinasiTambahPeminjamanBuku
+import com.example.perpustakaan_app.uicontroller.route.profil.DestinasiEditProfil
 import com.example.perpustakaan_app.view.PerpustakaanBottomAppBar
 import com.example.perpustakaan_app.view.buku.HalamanBuku
 import com.example.perpustakaan_app.view.buku.HalamanEditBuku
@@ -47,14 +49,16 @@ import com.example.perpustakaan_app.view.anggota.HalamanEditAnggota
 import com.example.perpustakaan_app.view.anggota.HalamanTambahAnggota
 import com.example.perpustakaan_app.view.peminjaman_buku.HalamanEditPeminjamanBuku
 import com.example.perpustakaan_app.view.peminjaman_buku.HalamanTambahPeminjamanBuku
-import com.example.perpustakaan_app.view.profil.HalamanProfil
+import com.example.perpustakaan_app.view.profil.HalamanEditProfil
+import com.example.perpustakaan_app.viewmodel.profil.ProfilViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun PetaNavigasi(
     navController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier,
-    appViewModel: AppViewModel = viewModel(factory = PenyediaViewModel.Factory)
+    appViewModel: AppViewModel = viewModel(factory = PenyediaViewModel.Factory),
+    profilViewModel: ProfilViewModel = viewModel(factory = PenyediaViewModel.Factory)
 ) {
     val isUserLoggedIn by appViewModel.isUserLoggedIn.collectAsState()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -65,7 +69,8 @@ fun PetaNavigasi(
             CircularProgressIndicator()
         }
     } else {
-        val startDestinasi = if (isUserLoggedIn == true) DestinasiBuku.route else DestinasiLogin.route
+        val startDestinasi =
+            if (isUserLoggedIn == true) DestinasiBuku.route else DestinasiLogin.route
 
         LaunchedEffect(isUserLoggedIn) {
             if (isUserLoggedIn == false) {
@@ -86,7 +91,8 @@ fun PetaNavigasi(
                         DestinasiPeminjamanBuku.route,
                         DestinasiCatatanDenda.route,
                         DestinasiProfil.route
-                    )) {
+                    )
+                ) {
                     PerpustakaanBottomAppBar(
                         navController = navController,
                         currentRoute = currentRoute
@@ -202,9 +208,12 @@ fun PetaNavigasi(
                         }
                     )
                 }
-                composable(DestinasiEditAnggota.routeWithArgs, arguments = listOf(navArgument(DestinasiEditAnggota.idAnggotaArg) {
-                    type = NavType.IntType
-                })) {
+                composable(
+                    DestinasiEditAnggota.routeWithArgs,
+                    arguments = listOf(navArgument(DestinasiEditAnggota.idAnggotaArg) {
+                        type = NavType.IntType
+                    })
+                ) {
                     HalamanEditAnggota(
                         navigateBack = {
                             navController.popBackStack()
@@ -231,12 +240,12 @@ fun PetaNavigasi(
                         navigateToItemEntry = {
                             navController.navigate(DestinasiTambahPeminjamanBuku.route)
                         },
-                        onEditClick = {
-                            id -> navController.navigate("${DestinasiEditPeminjamanBuku.route}/$id")
+                        onEditClick = { id ->
+                            navController.navigate("${DestinasiEditPeminjamanBuku.route}/$id")
                         }
                     )
                 }
-                composable(DestinasiTambahPeminjamanBuku.route){
+                composable(DestinasiTambahPeminjamanBuku.route) {
                     HalamanTambahPeminjamanBuku(
                         navigateBack = {
                             navController.popBackStack()
@@ -285,8 +294,42 @@ fun PetaNavigasi(
                     )
                 }
 
+                // --- 6. RUTE PROFIL ---
                 composable(DestinasiProfil.route) {
-                    HalamanProfil()
+                    HalamanProfil(
+                        onEditClick = { id ->
+                            navController.navigate("${DestinasiEditProfil.route}/$id")
+                        },
+                        profilUiState = profilViewModel.profilUiState,
+                        onLoadData = { profilViewModel.getProfil() },
+                        retryAction = { profilViewModel.getProfil() }
+                    )
+                }
+
+                composable(
+                    DestinasiEditProfil.routeWithArgs,
+                    arguments = listOf(navArgument(DestinasiEditProfil.idPustakawanArg) {
+                        type = NavType.IntType
+                    })
+                ) {
+                    HalamanEditProfil(
+                        navigateBack = {
+                            navController.popBackStack()
+                        },
+                        onSuccess = {
+                            // Memberi sinyal refresh ke halaman sebelumnya
+                            navController.previousBackStackEntry
+                                ?.savedStateHandle
+                                ?.set("refresh_data", true)
+
+                            // Memberi pesan sukses
+                            navController.previousBackStackEntry
+                                ?.savedStateHandle
+                                ?.set("pesan_sukses", "Berhasil memperbarui data peminjaman!")
+
+                            navController.popBackStack()
+                        }
+                    )
                 }
             }
         }

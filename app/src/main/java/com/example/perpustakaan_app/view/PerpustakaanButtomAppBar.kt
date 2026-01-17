@@ -1,5 +1,6 @@
 package com.example.perpustakaan_app.view
 
+import androidx.compose.foundation.background
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Book
@@ -16,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.perpustakaan_app.R
 import com.example.perpustakaan_app.uicontroller.route.anggota.DestinasiAnggota
@@ -75,7 +77,8 @@ fun PerpustakaanBottomAppBar(
                         contentDescription = item.label
                     )
                 },
-                label = { Text(text = item.label) }
+                label = { Text(text = item.label,
+                    fontSize = 11.sp) }
             )
         }
     }

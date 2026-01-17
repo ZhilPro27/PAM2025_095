@@ -1,5 +1,6 @@
 package com.example.perpustakaan_app.view.peminjaman_buku
 
+import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -39,6 +40,7 @@ import com.example.perpustakaan_app.viewmodel.provider.PenyediaViewModel
 import com.example.perpustakaan_app.viewmodel.peminjaman_buku.PeminjamanBukuUiState
 import com.example.perpustakaan_app.viewmodel.peminjaman_buku.PeminjamanBukuViewModel
 import com.example.perpustakaan_app.R
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -363,7 +365,8 @@ fun SearchPeminjamanBar(
         onValueChange = onQueryChange,
         label = { Text("Cari nama") },
         singleLine = true,
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth()
+            .background(colorResource(R.color.white)),
         trailingIcon = {
             IconButton(onClick = onSearch) {
                 Icon(Icons.Default.Search, contentDescription = "Cari")
@@ -438,6 +441,8 @@ private fun PengembalianConfirmationDialog(
 @Composable
 fun LoadingScreen(modifier: Modifier = Modifier) {
     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        CircularProgressIndicator()
+        CircularProgressIndicator(
+            color = colorResource(R.color.navy)
+        )
     }
 }

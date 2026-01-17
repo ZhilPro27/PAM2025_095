@@ -1,5 +1,6 @@
 package com.example.perpustakaan_app.view
 
+import androidx.compose.foundation.background
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -27,10 +28,11 @@ fun PerpustakaanTopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = colorResource(R.color.white),
             titleContentColor = colorResource(R.color.navy),
-            navigationIconContentColor = colorResource(R.color.navy)
+            navigationIconContentColor = colorResource(R.color.navy),
+            scrolledContainerColor = colorResource(R.color.white)
         ),
         title = { Text(title) },
-        modifier = modifier,
+        modifier = modifier.background(colorResource(R.color.white)),
         scrollBehavior = scrollBehavior,
         navigationIcon = {
             if (canNavigateBack) {

@@ -1,5 +1,6 @@
 package com.example.perpustakaan_app.view.anggota
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -66,6 +67,7 @@ import com.example.perpustakaan_app.viewmodel.anggota.AnggotaViewModel
 import com.example.perpustakaan_app.viewmodel.provider.PenyediaViewModel
 import com.example.perpustakaan_app.R
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HalamanAnggota(
@@ -188,7 +190,9 @@ fun BodyHalamanAnggota(
             query = searchQuery,
             onQueryChange = onQueryChange,
             onSearch = onSearch,
-            modifier = Modifier.padding(top = 0.dp, start = 16.dp, end = 16.dp, bottom = 0.dp)
+            modifier = Modifier
+                .background(colorResource(R.color.white))
+                .padding(top = 0.dp, start = 16.dp, end = 16.dp, bottom = 0.dp)
         )
         Spacer(modifier = Modifier.height(16.dp))
         when (anggotaUiState) {
@@ -303,7 +307,9 @@ fun ItemAnggota(
 @Composable
 fun LoadingScreen(modifier: Modifier = Modifier) {
     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        CircularProgressIndicator()
+        CircularProgressIndicator(
+            color = colorResource(id = R.color.navy),
+        )
     }
 }
 
@@ -336,7 +342,8 @@ fun SearchAnggotaBar(
         onValueChange = onQueryChange,
         label = { Text("Cari nama") },
         singleLine = true,
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth()
+            .background(colorResource(R.color.white)),
         trailingIcon = {
             IconButton(onClick = onSearch) {
                 Icon(Icons.Default.Search, contentDescription = "Cari")

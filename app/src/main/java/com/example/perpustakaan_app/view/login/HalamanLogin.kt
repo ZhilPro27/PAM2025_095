@@ -1,5 +1,6 @@
 package com.example.perpustakaan_app.view.login
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,6 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -38,6 +41,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.perpustakaan_app.viewmodel.login.LoginViewModel
 import com.example.perpustakaan_app.viewmodel.provider.PenyediaViewModel
 import com.example.perpustakaan_app.utils.WidgetSnackbarKeren
+import com.example.perpustakaan_app.R
 
 
 @Composable
@@ -61,22 +65,20 @@ fun HalamanLogin(
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize().background(colorResource(R.color.white))) {
 
-        Scaffold(
-        ) { innerPadding ->
             Column(
                 modifier = modifier
                     .fillMaxSize()
-                    .padding(innerPadding)
-                    .padding(16.dp),
+                    .padding(16.dp)
+                    .background(colorResource(R.color.white)),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
                     text = "Login Perpustakaan",
                     style = MaterialTheme.typography.headlineMedium,
-                    color = MaterialTheme.colorScheme.primary
+                    color = colorResource(R.color.navy)
                 )
 
                 Spacer(modifier = Modifier.height(32.dp))
@@ -115,9 +117,15 @@ fun HalamanLogin(
                 Spacer(modifier = Modifier.height(32.dp))
 
                 if (uiState.isLoading) {
-                    CircularProgressIndicator()
+                    CircularProgressIndicator(
+                        color = colorResource(R.color.navy),
+                    )
                 } else {
                     Button(
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = colorResource(R.color.navy),
+                            contentColor = colorResource(R.color.white)
+                        ),
                         onClick = { viewModel.login() },
                         modifier = Modifier.fillMaxWidth(),
                         enabled = uiState.email.isNotBlank() && uiState.password.isNotBlank()
@@ -126,7 +134,6 @@ fun HalamanLogin(
                     }
                 }
             }
-        }
         WidgetSnackbarKeren(
             hostState = snackbarHostState,
             modifier = Modifier

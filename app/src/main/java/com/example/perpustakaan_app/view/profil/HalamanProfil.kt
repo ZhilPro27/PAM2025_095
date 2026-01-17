@@ -1,3 +1,4 @@
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -9,9 +10,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.perpustakaan_app.R
 import com.example.perpustakaan_app.utils.WidgetSnackbarKeren
 import com.example.perpustakaan_app.viewmodel.AppViewModel
 import com.example.perpustakaan_app.viewmodel.profil.ProfilUiState
@@ -51,15 +54,17 @@ fun HalamanProfil(
         }
     }
 
-    Scaffold { innerPadding ->
+    Scaffold {
         Box(
             modifier = modifier
                 .fillMaxSize()
-                .padding(innerPadding)
+                .background(colorResource(R.color.white))
         ) {
             when (profilUiState) {
                 is ProfilUiState.Loading -> {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.Center),
+                        color = colorResource(R.color.navy))
                 }
                 is ProfilUiState.Success -> {
                     val profil = profilUiState.profil
@@ -74,7 +79,7 @@ fun HalamanProfil(
                             imageVector = Icons.Default.AccountCircle,
                             contentDescription = null,
                             modifier = Modifier.size(120.dp),
-                            tint = MaterialTheme.colorScheme.primary
+                            tint = colorResource(R.color.navy)
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
@@ -90,7 +95,10 @@ fun HalamanProfil(
 
                         Button(
                             onClick = { onEditClick(profil.id_pustakawan) },
-                            modifier = Modifier.fillMaxWidth(0.7f)
+                            modifier = Modifier.fillMaxWidth(0.7f),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = colorResource(R.color.info)
+                            )
                         ) {
                             Text("Edit Profil")
                         }
@@ -100,7 +108,7 @@ fun HalamanProfil(
                         Button(
                             onClick = { appViewModel.logout() },
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.error
+                                containerColor = colorResource(R.color.error)
                             ),
                             modifier = Modifier.fillMaxWidth(0.7f)
                         ) {

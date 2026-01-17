@@ -1,5 +1,6 @@
 package com.example.perpustakaan_app
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -8,6 +9,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -17,15 +19,17 @@ import com.example.perpustakaan_app.ui.theme.Perpustakaan_appTheme
 import com.example.perpustakaan_app.uicontroller.PetaNavigasi
 
 class MainActivity : ComponentActivity() {
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            Perpustakaan_appTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) {
-                    PetaNavigasi(modifier = Modifier
-                        .background(colorResource(R.color.white)))
-                }
+            Surface(
+                modifier = Modifier.fillMaxSize(),
+                color = colorResource(R.color.white)
+            ) {
+                PetaNavigasi(modifier = Modifier
+                    .background(colorResource(R.color.white)))
             }
         }
     }

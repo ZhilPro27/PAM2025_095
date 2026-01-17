@@ -46,9 +46,10 @@ fun HalamanEditAnggota(
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize()){
+    Box(modifier = Modifier.fillMaxSize().background(colorResource(R.color.white))){
         Scaffold(
-            modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+            modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+                .background(colorResource(R.color.white)),
             topBar = {
                 PerpustakaanTopAppBar(
                     title = DestinasiEditAnggota.tittleRes,
@@ -73,7 +74,7 @@ fun HalamanEditAnggota(
                 modifier = Modifier
                     .padding(innerPadding)
                     .verticalScroll(rememberScrollState())
-                    .fillMaxWidth()
+                    .fillMaxSize()
                     .background(colorResource(R.color.white))
             )
         }

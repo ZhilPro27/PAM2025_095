@@ -2,6 +2,7 @@ package com.example.perpustakaan_app.view.catatan_denda
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -16,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -29,7 +31,7 @@ import com.example.perpustakaan_app.viewmodel.catatan_denda.CatatanDendaViewMode
 import com.example.perpustakaan_app.viewmodel.provider.PenyediaViewModel
 import java.text.NumberFormat
 import java.util.Locale
-
+import com.example.perpustakaan_app.R
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -104,6 +106,7 @@ fun BodyCatatanDenda(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(colorResource(R.color.white))
     ){
         SearchDendaBar(
             query = searchQuery,
@@ -114,7 +117,9 @@ fun BodyCatatanDenda(
         when (dendaUiState) {
             is CatatanDendaUiState.Loading -> {
                 Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
+                    CircularProgressIndicator(
+                        color = colorResource(id = R.color.navy)
+                    )
                 }
             }
             is CatatanDendaUiState.Success -> {
@@ -126,13 +131,14 @@ fun BodyCatatanDenda(
                     ListCatatanDenda(
                         listDenda = dendaUiState.catatanDenda,
                         onUpdateStatus = onUpdateStatus,
-                        modifier = modifier
+                        modifier = modifier.background(colorResource(R.color.white))
                     )
                 }
             }
             is CatatanDendaUiState.Error -> {
                 Column(
-                    modifier = modifier.fillMaxSize(),
+                    modifier = modifier.fillMaxSize()
+                        .background(colorResource(R.color.white)),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -175,9 +181,13 @@ fun ItemDenda(
 
     Card(
         modifier = modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 3.dp,
+            pressedElevation = 7.dp,
+            draggedElevation = 7.dp
+        ),
         colors = CardDefaults.cardColors(
-            containerColor = if (isLunas) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.errorContainer
+            containerColor = colorResource(R.color.white)
         )
     ) {
         Column(
@@ -226,13 +236,17 @@ fun ItemDenda(
             if (!isLunas) {
                 Button(
                     onClick = { onUpdateStatus(denda.id_denda) },
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = colorResource(R.color.info),
+                        contentColor = colorResource(R.color.white))
                 ) {
                     Icon(imageVector = Icons.Default.Warning, contentDescription = null)
                     Spacer(modifier = Modifier.width(8.dp))
                     Text("Tandai Lunas")
                 }
+
+                Spacer(modifier = Modifier.height(8.dp))
             }
         }
     }
@@ -260,6 +274,22 @@ fun SearchDendaBar(
     modifier: Modifier = Modifier
 ) {
     OutlinedTextField(
+        colors = TextFieldDefaults.colors(
+            focusedTextColor = colorResource(id = R.color.navy),
+            unfocusedTextColor = colorResource(id = R.color.navy),
+
+            focusedTrailingIconColor = colorResource(id = R.color.navy),
+            unfocusedTrailingIconColor = colorResource(id = R.color.navy),
+
+            focusedLabelColor = colorResource(id = R.color.navy),
+            unfocusedLabelColor = colorResource(id = R.color.navy),
+
+            focusedPlaceholderColor = colorResource(id = R.color.navy),
+            unfocusedPlaceholderColor = colorResource(id = R.color.navy),
+
+            focusedContainerColor = colorResource(id = R.color.white),
+            unfocusedContainerColor = colorResource(id = R.color.white)
+        ),
         value = query,
         onValueChange = onQueryChange,
         label = { Text("Cari nama") },
@@ -293,69 +323,13 @@ private fun DendaConfirmationDialog(
         modifier = modifier,
         dismissButton = {
             TextButton(onClick = onDendaCancel) {
-                Text(text = "Batal")
+                Text(text = "Batal", color = colorResource(R.color.navy))
             }
         },
         confirmButton = {
             TextButton(onClick = onDendaConfirm) {
-                Text(text = "Ya, Kembalikan", color = MaterialTheme.colorScheme.error)
+                Text(text = "Ya, Kembalikan", color = colorResource(R.color.error))
             }
         }
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun HalamanCatatanDendaPreview() {
-    HalamanCatatanDenda(navigateBack = {},
-        viewModel = viewModel(factory = PenyediaViewModel.Factory))
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ItemDendaPreview(){
-    ItemDenda(denda = DataCatatanDenda(
-        id_denda = 1,
-        nama = "tes",
-        hari_terlambat = 1,
-        jumlah = 10000,
-        status = "Belum Lunas",
-        tanggal_dibayar = null,
-        id_peminjaman = 1
-    ), onUpdateStatus = {})
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ListCatatanDenda() {
-    ListCatatanDenda(listDenda = listOf(
-        DataCatatanDenda(
-            id_denda = 1,
-            nama = "tes",
-            hari_terlambat = 1,
-            jumlah = 10000,
-            status = "Belum Lunas",
-            tanggal_dibayar = null,
-            id_peminjaman = 1
-        ),
-        DataCatatanDenda(
-            id_denda = 2,
-            nama = "tes",
-            hari_terlambat = 1,
-            jumlah = 10000,
-            status = "Belum Lunas",
-            tanggal_dibayar = null,
-            id_peminjaman = 1
-        )
-    ), onUpdateStatus = {})
-}
-
-@Preview(showBackground = true)
-@Composable
-fun SearchDendaBarPreview() {
-    SearchDendaBar(
-        query = "",
-        onQueryChange = {},
-        onSearch = {},
-        modifier = Modifier.padding(16.dp))
 }

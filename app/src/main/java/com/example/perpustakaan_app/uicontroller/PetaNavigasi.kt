@@ -3,6 +3,7 @@ package com.example.perpustakaan_app.uicontroller
 import HalamanProfil
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -97,7 +98,7 @@ fun PetaNavigasi(
                     PerpustakaanBottomAppBar(
                         navController = navController,
                         currentRoute = currentRoute,
-                        modifier = modifier.padding(top = 0.dp)
+                        modifier = modifier.padding(top = 2.dp)
                     )
                 }
             }
@@ -207,7 +208,8 @@ fun PetaNavigasi(
                                 ?.set("pesan_sukses", "Berhasil menambah data anggota!")
 
                             navController.popBackStack()
-                        }
+                        },
+                        modifier = Modifier.background(color = androidx.compose.ui.graphics.Color.White)
                     )
                 }
                 composable(

@@ -3,6 +3,7 @@ package com.example.perpustakaan_app.view.anggota
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -58,16 +59,18 @@ fun HalamanTambahAnggota(
 
     Scaffold(
         snackbarHost = { WidgetSnackbarKeren(hostState = snackbarHostState) },
-        modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+            .background(colorResource(R.color.white)),
         topBar = {
             PerpustakaanTopAppBar(
                 title = DestinasiTambahAnggota.tittleRes,
                 canNavigateBack = true,
                 scrollBehavior = scrollBehavior,
-                navigateUp = navigateBack
+                navigateUp = navigateBack,
+                modifier = Modifier.background(colorResource(R.color.white))
             )
         }
-    ) { innerPadding ->
+    ) {innerPadding ->
         BodyTambahAnggota(
             uiStateAnggota = viewModel.uiStateAnggota,
             onValueChange = viewModel::updateUiState,
@@ -82,7 +85,7 @@ fun HalamanTambahAnggota(
             modifier = Modifier
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
-                .fillMaxWidth()
+                .fillMaxSize()
                 .background(colorResource(R.color.white))
         )
     }
@@ -96,7 +99,8 @@ fun BodyTambahAnggota(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier.padding(16.dp),
+        modifier = modifier.padding(16.dp)
+            .background(colorResource(R.color.white)),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         FormInputAnggota(

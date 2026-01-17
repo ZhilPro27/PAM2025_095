@@ -111,7 +111,11 @@ fun BodyEditPeminjamanBuku(
         Button(
             onClick = onSaveClick,
             modifier = Modifier.fillMaxWidth(),
-            enabled = uiState.isEntryValid
+            enabled = uiState.isEntryValid,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = colorResource(R.color.navy),
+                contentColor = colorResource(R.color.white)
+            )
         ) {
             Text("Simpan Perubahan")
         }

@@ -78,8 +78,8 @@ fun HalamanTambahPeminjamanBuku(
             modifier = Modifier
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
-                .fillMaxWidth()
                 .background(colorResource(R.color.white))
+                .fillMaxSize()
         )
     }
 }
@@ -99,7 +99,7 @@ fun BodyTambahPeminjamanBuku(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier.padding(16.dp),
+        modifier = modifier.padding(16.dp).background(colorResource(R.color.white)),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         FormInputPeminjamanBuku(
@@ -117,7 +117,11 @@ fun BodyTambahPeminjamanBuku(
 
         Button(
             onClick = onSaveClick,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = colorResource(id = R.color.navy),
+                contentColor = colorResource(id = R.color.white)
+            )
         ) {
             Text("Simpan Data Peminjaman")
         }
@@ -138,7 +142,7 @@ fun FormInputPeminjamanBuku(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier,
+        modifier = modifier.background(colorResource(R.color.white)),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         // Dropdown Anggota

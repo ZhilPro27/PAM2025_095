@@ -83,7 +83,8 @@ fun HalamanTambahBuku(
                     title = DestinasiTambahBuku.tittleRes,
                     canNavigateBack = true,
                     scrollBehavior = scrollBehavior,
-                    navigateUp = navigateBack
+                    navigateUp = navigateBack,
+                    modifier = Modifier.background(colorResource(R.color.white))
                 )
             }
         ) { innerPadding ->
@@ -108,7 +109,7 @@ fun HalamanTambahBuku(
                 modifier = Modifier
                     .padding(innerPadding)
                     .verticalScroll(rememberScrollState())
-                    .fillMaxWidth()
+                    .fillMaxSize()
                     .background(colorResource(R.color.white))
             )
 

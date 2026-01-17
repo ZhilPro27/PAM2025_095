@@ -294,7 +294,9 @@ fun ItemBuku(
 @Composable
 fun LoadingScreen(modifier: Modifier = Modifier) {
     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        CircularProgressIndicator()
+        CircularProgressIndicator(
+            color = colorResource(id = R.color.navy)
+        )
     }
 }
 
